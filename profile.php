@@ -3,24 +3,25 @@
 	$db = new database_handler();
 	
 	$id = $_POST['id'];
-	
-	$info = mysqli_fetch_assoc(mysqli_query($db->con,"SELECT username, password, first_name, last_name, email, gpa,
-														graduation_year, major
-														FROM users WHERE id = '$id'"));
-	//Method for multiple classes
-	//$tutorInfo = mysqli_fetch_assoc(mysqli_query($db->con,"SELECT * FROM tutorInfo WHERE id = '$id'"));
+	$infoResult = mysqli_query($db->con,"SELECT username, password, first_name, last_name, email, gpa,
+										graduation_year, major FROM users WHERE id = '$id'") 
+										or die ("Error in selecting " . mysqli_error($db->con));
+	$info = mysqli_fetch_assoc($infoResult);
 														
-	$output1 = array('username'=>$info['username'],'password'=>$info['password'],'first_name'=>$info['first_name'],
+	$outputInfo = array('username'=>$info['username'],'password'=>$info['password'],'first_name'=>$info['first_name'],
 					'last_name'=>$info['last_name'],'email'=>$info['email'],'gpa'=>$info['gpa'],
 					'graduation_year'=>$info['graduation_year'],'major'=>$info['major']);
-	$sql ="SELECT * FROM tutorInfo WHERE id = '$id'";
-	$result = mysqli_query($db->con, $sql) or die ("Error in selecting " . mysqli_error($db->con));
-	$output2 = array();
-	while($row = mysqli_fetch_assoc($result)){
-		$output2[] = $row;
+	$classesQuery ="SELECT * FROM CLASSES WHERE id = '$id'";
+	$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
+	$outputClasses = array();
+	while($row = mysqli_fetch_assoc($resultClasses)){
+		$outputClasses[] = $row;
 	}
-	//$output2 = array('classes'=>$tutorInfo['classes'],'description'=>$tutorInfo['description']);
+	$tutorQuery = "SELECT * FROM tutorInfo WHERE id = '$id'";
+	$tutorResult = mysqli_query($db->con, $tutorQuery) or die ("Error in select " . mysqli_error($db->con));
+	$tutorInfo = mysqli_fetch_assoc($tutorResult);
+	$outputTutor = array('description'=>$tutorInfo['description'], 'rating'=>$tutorInfo['rating'], 'price'=>$tutorInfo['price']);
 
-	$output = array('info'=>$output1,'tutorInfo'=>$output2);
+	$output = array('info'=>$outputInfo,'classes'=>$outputClasses,'tutorInfo'=>$outputTutor);
 	echo json_encode($output);
 ?>

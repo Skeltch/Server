@@ -29,12 +29,15 @@ $sql = "CREATE TABLE users( ".
 		
 mysql_select_db('tutoru');
 $retval = mysql_query($sql, $conn);
-$sql1= "CREATE TABLE tutorInfo( id int(11) NOT NULL,
-								classes text,
+$sql1= "CREATE TABLE tutorInfo( id int(11) NOT NULL PRIMARY KEY,
 								description text,
 								rating int(1),
-								price double(4,2))";
+								price double(4,2));";
 mysql_query($sql1,$conn);
+
+$sql2 = "CREATE TABLE classes(id int(11) NOT NULL, classes text);";
+mysql_query($sql2,$conn);
+
 if(!$retval){
 	die('Could not create table: ' . mysql_error());
 }

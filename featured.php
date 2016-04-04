@@ -7,8 +7,9 @@
 	$info = mysqli_fetch_assoc(mysqli_query($db->con,"SELECT id,username, password, first_name, last_name, email, gpa,
 														graduation_year, major
 														FROM users WHERE id = 2"));
-	$tutorInfo = mysqli_fetch_assoc(mysqli_query($db->con,"SELECT classes, description FROM tutorInfo WHERE id = 2"));
+	$tutorInfo = mysqli_fetch_assoc(mysqli_query($db->con,"SELECT * FROM tutorInfo WHERE id = 2"));
 								
+	$classes = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT * FROM classes WHERE id = 2"));
 	//Some of this is unnecessary and will be taken out in the final product
 	$output = array('id'=>$info['id'],
 					'first_name'=>$info['first_name'],
@@ -17,7 +18,7 @@
 					'gpa'=>$info['gpa'],
 					'graduation_year'=>$info['graduation_year'],
 					'major'=>$info['major'],
-					'classes'=>$tutorInfo['classes'],
+					'classes'=>$classes['classes'],
 					'description'=>$tutorInfo['description']);
 	echo json_encode($output);
 ?>
