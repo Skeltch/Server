@@ -54,6 +54,11 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
 	}
 	else{
+		if($type=='Tutor'){
+			$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM users WHERE username='$username'"));
+			$id = $idResult['id'];	
+			mysqli_query($db->con,"INSERT INTO tutorInfo (id) VALUES('$id')");
+		}
 		echo "success";
 		exit;
 	}
