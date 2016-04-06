@@ -17,12 +17,6 @@
 	//"To keep things fair the limit for classes you can tutor in is x")
 	//Method to remove rows (Possibly delete all rows and reinsert them)
 	$id = intval($_POST['id']);
-	$tutorQuery = "SELECT * FROM tutorInfo WHERE id = '$id'";
-	$tutorResult = mysqli_query($db->con, $tutorQuery) or die ("Error in select " . mysqli_error($db->con));
-	$tutorInfo = mysqli_fetch_assoc($tutorResult);
-	if(mysqli_num_rows($tutorResult)>0){
-		mysqli_query($db->con, "DELETE FROM tutorInfo WHERE id = '$id'");
-	}
 	
 	//Email and password require more verification to change
 	//PREPARE
@@ -35,29 +29,25 @@
 		echo "Prepare failed : (" .$db->con->errno . ")" . $db->con->error;
 	}
 	//Update instead
-	if(!$stmt = $db->con->prepare("UPDATE tutorInfo
+	if(!$tutorStmt = $db->con->prepare("UPDATE tutorInfo
 									SET description = COALESCE(?, description)
 									WHERE id = '$id'")){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
-	if(!$tutorStmt = $db->con->prepare("INSERT INTO tutorInfo (id, description) VALUES (?, ?)" /*or
-									$stmt1 = "UPDATE USERS  SET
-											password
-											email
-											gpa
-											graduation_year
-											major*/)){
+	/*
+	if(!$tutorStmt = $db->con->prepare("INSERT INTO tutorInfo (id, description) VALUES (?, ?)" )){
 		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 	}
+	*/
 	if(isset($_POST['classes'])){
 		$classesJSON = json_decode($_POST['classes']);
 		//count($classes) is length
 		//One approach is to include the entire life of the prepared statements in a loop in this if statement
 		//This is costly as it is many insert statements
-		for($i=0; $i<count($classesJSON); $i++){
+		mysqli_query($db->con, "DELETE FROM  WHERE id = '$id'");
+		for($i=0; $i<=count($classesJSON); $i++){
 		//$classQuery .= "INSERT INTO classes (id, classes) VALUES (?,?);"
-			$id = strval(i);
-			$classes = $classesJSON->{strval(i)};
+			$classes = $classesJSON->{strval($i)};
 			if(!$classesStmt = $db->con->prepare("INSERT INTO classes (id, classes) VALUES (?,?)")){
 				echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 			}
@@ -70,21 +60,15 @@
 		}
 	}
 
-
+	
 	//BIND_PARAM
-	if(!$tutorStmt->bind_param("is", $id, $description)){
+	if(!$tutorStmt->bind_param("s", $description)){
 		echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
 	}
 	//Add email and password change support
 	if(!$infoStmt->bind_param("dis", $gpa, $gradYear, $major)){
 		echo "Binding parameters failed (" . $infoStmt->errno . ") " . $infoStmt->error;
 	}
-	/*
-	if(!$infoStmt->bind_param("ssdis", $password, $email, $gpa, $gradYear, $major)){
-		echo "Binding parameters failed: (" . $infoStmt->errno . ") " . $infoStmt->error;
-	}
-	*/
-
 	//Variable set
 	$classes='';
 	$description='';
@@ -94,13 +78,16 @@
 	$major='';
 	if(isset($_POST['description'])){
 		$description = $_POST['description'];
+		echo $description;
 	}	
-	/*
+
+	
 	if(isset($_POST['password'])){
 		$password=$_POST['password'];
 	}
 	$email=$_POST['email'];
-	*/
+	
+
 	if(isset($_POST['graduation_year'])){
 		$gradYear=$_POST['graduation_year'];
 	}
@@ -122,4 +109,5 @@
 		echo "success";
 		exit;
 	}
+	
 ?>
