@@ -1,5 +1,6 @@
 <?php
-
+error_reporting(E_ALL);
+ini_set('display_errors',1);
 //Checking credentials
 
 if(isset($_POST['username']) && isset($_POST['password'])){
@@ -8,8 +9,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 	
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("SELECT id, username, password, email, type, gpa,
-									first_name, last_name, dob, graduation_year, major 
+	if(!$stmt = $db->con->prepare("SELECT id, username, password, type
 									FROM USERS WHERE username = ? AND password = ?")){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
@@ -22,15 +22,16 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 	if(!$stmt->execute()){
 		echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 	}
-	if(mysqli_stmt_get_result($stmt)->num_rows>0){
-		$getID = mysqli_fetch_assoc(mysqli_query($db->con,"SELECT id FROM users WHERE username = '$username'"));
-		$userID = $getID['id'];
-		$output = array('result'=>'success' , 'id'=>$userID);
+	$stmt->store_result();
+	if($stmt->num_rows>0){
+		$stmt->bind_result($userID, $username, $password, $role);
+		$stmt->fetch();
+		$output = array('result'=>'success' , 'id'=>$userID, 'role'=>$role);
 		echo json_encode($output);
 		exit;
 	}
 	else{
-		$output = array('result'=>'Login Failed' , 'id'=>'null');
+		$output = array('result'=>'Login Failed' , 'id'=>'null', 'role'=>'null');
 		echo json_encode($output);
 	}
 }

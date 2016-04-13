@@ -3,7 +3,7 @@
 	$db = new database_handler();
 
 	$id = $_POST['id'];
-		$infoQuery = "SELECT a.*, b.*
+	$infoQuery = "SELECT a.*, b.*
 					FROM users a, tutorInfo b
 					WHERE a.id=b.id";
 	$infoResult = mysqli_query($db->con, $infoQuery);

@@ -3,15 +3,23 @@
 	$db = new database_handler();
 
 	$id = $_POST['id'];
-	$infoQuery = "SELECT a.*, b.*
+	$infoQuery = "SELECT a.*, b.description
 					FROM users a, tutorInfo b
 					WHERE a.id='$id' AND b.id='$id'";
-	$infoResult = mysqli_query($db->con, $infoQuery);
-	$info = mysqli_fetch_assoc($infoResult);
-	$outputInfo = array('username'=>$info['username'],'password'=>$info['password'],'first_name'=>$info['first_name'],
-					'last_name'=>$info['last_name'],'email'=>$info['email'],'gpa'=>$info['gpa'],
-					'graduation_year'=>$info['graduation_year'],'major'=>$info['major'], 'description'=>$info['description']);
-					
+	if(!$infoStmt = $db->con->prepare($infoQuery)){
+		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+	}
+	$infoStmt->execute();
+	$infoStmt->bind_result($id, $username, $password, $email, $role, $gpa,
+						$firstName, $lastName, $gradYear, $major,
+						$dob, $description);
+	$infoStmt->fetch();
+	$outputInfo = array('username'=>$username, 'password'=>$password, 'first_name'=>$firstName,
+						'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
+						'major'=>$major, 'description'=>$description);
+	$infoStmt->close();
+
+	//Are prepared statements necessary here as all classes will be strings that we decide
 	$classesQuery ="SELECT * FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
 	$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
 	$outputClasses = array();

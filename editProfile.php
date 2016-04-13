@@ -28,7 +28,7 @@
 	if(!$infoStmt = $db->con->prepare($infoQuery)){
 		echo "Prepare failed : (" .$db->con->errno . ")" . $db->con->error;
 	}
-	//Update instead
+
 	if(!$tutorStmt = $db->con->prepare("UPDATE tutorInfo
 									SET description = COALESCE(?, description)
 									WHERE id = '$id'")){
