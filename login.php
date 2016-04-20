@@ -9,7 +9,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 	
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("SELECT id, username, password, type
+	if(!$stmt = $db->con->prepare("SELECT id, username, password, type, first_name, last_name
 									FROM USERS WHERE username = ? AND password = ?")){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
@@ -24,9 +24,9 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 	}
 	$stmt->store_result();
 	if($stmt->num_rows>0){
-		$stmt->bind_result($userID, $username, $password, $role);
+		$stmt->bind_result($userID, $username, $password, $role, $first_name, $last_name);
 		$stmt->fetch();
-		$output = array('result'=>'success' , 'id'=>$userID, 'role'=>$role);
+		$output = array('result'=>'success' , 'id'=>$userID, 'role'=>$role, 'first_name'=>$first_name, 'last_name'=>$last_name);
 		echo json_encode($output);
 		exit;
 	}

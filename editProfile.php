@@ -41,13 +41,15 @@
 	*/
 	if(isset($_POST['classes'])){
 		$classesJSON = json_decode($_POST['classes']);
-		//count($classes) is length
 		//One approach is to include the entire life of the prepared statements in a loop in this if statement
 		//This is costly as it is many insert statements
-		mysqli_query($db->con, "DELETE FROM  WHERE id = '$id'");
-		for($i=0; $i<=count($classesJSON); $i++){
-		//$classQuery .= "INSERT INTO classes (id, classes) VALUES (?,?);"
-			$classes = $classesJSON->{strval($i)};
+		mysqli_query($db->con, "DELETE FROM CLASSES  WHERE id = '$id'") or die ("Error in selecting " . mysqli_error($db->con));
+		for($i=0; $i<count($classesJSON); $i++){
+			//$classes = $classesJSON->{strval($i)};
+			$classes = $classesJSON[$i];
+			error_log($classes);
+			error_log(count($classesJSON));
+			error_log(json_encode($_POST['classes']));
 			if(!$classesStmt = $db->con->prepare("INSERT INTO classes (id, classes) VALUES (?,?)")){
 				echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 			}

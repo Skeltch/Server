@@ -3,28 +3,36 @@
 	$db = new database_handler();
 
 	$id = $_POST['id'];
-	$infoQuery = "SELECT a.*, b.description
-					FROM users a, tutorInfo b
-					WHERE a.id='$id' AND b.id='$id'";
+	$infoQuery = "SELECT * FROM USERS WHERE id = '$id'";
 	if(!$infoStmt = $db->con->prepare($infoQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
 	$infoStmt->execute();
 	$infoStmt->bind_result($id, $username, $password, $email, $role, $gpa,
-						$firstName, $lastName, $gradYear, $major,
-						$dob, $description);
+						$firstName, $lastName, $gradYear, $dob,
+						$major);
 	$infoStmt->fetch();
-	$outputInfo = array('username'=>$username, 'password'=>$password, 'first_name'=>$firstName,
+	$infoStmt->close();
+	$outputClasses = array();
+	if($role!="Tutee"){
+		$tutorQuery ="SELECT description, rating, price FROM tutorInfo WHERE id = '$id'";
+		if(!$tutorStmt = $db->con->prepare($tutorQuery)){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		$tutorStmt->execute();
+		$tutorStmt->bind_result($description, $rating, $price);
+		$tutorStmt->fetch();
+		$outputInfo = array('username'=>$username, 'password'=>$password, 'first_name'=>$firstName,
 						'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
 						'major'=>$major, 'description'=>$description);
-	$infoStmt->close();
-
-	//Are prepared statements necessary here as all classes will be strings that we decide
-	$classesQuery ="SELECT * FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
-	$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
-	$outputClasses = array();
-	while($row = mysqli_fetch_assoc($resultClasses)){
-		$outputClasses[] = $row;
+		$tutorStmt->close();
+		
+		//Are prepared statements necessary here as all classes will be strings that we decide
+		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
+		$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
+		while($row = mysqli_fetch_assoc($resultClasses)){
+			$outputClasses[] = $row;
+		}
 	}
 	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses);
 	echo json_encode($output);
