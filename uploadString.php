@@ -20,6 +20,7 @@ if(!$stmt->execute()){
 	echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
 }
 echo "success";
+
 /*
 $image = imagecreatefromstring($data);
 if(imagepng($image,$target_path)){
@@ -29,4 +30,5 @@ else{
 	echo "failed";
 }
 */
+
 ?>
