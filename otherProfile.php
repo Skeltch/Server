@@ -8,7 +8,7 @@
 	
 	//Include email?
 	$infoQuery = "SELECT a.username, a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description
-					FROM users a, tutorInfo b
+					FROM USERS a, tutorInfo b
 					WHERE a.id='$id' AND b.id='$id'";
 	if(!$infoStmt = $db->con->prepare($infoQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
@@ -28,7 +28,7 @@
 	while($row = mysqli_fetch_assoc($resultClasses)){
 		$outputClasses[] = $row;
 	}
-	$imageQuery = "SELECT image from image where id = '$id'";
+	$imageQuery = "SELECT image from IMAGE where id = '$id'";
 	$imageString="";
 	
 	if(!$imageStmt = $db->con->prepare($imageQuery)){

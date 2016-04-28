@@ -27,7 +27,19 @@
 	while($row = mysqli_fetch_assoc($resultClasses)){
 		$outputClasses[] = $row;
 	}
-	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses);
+	$imageQuery = "SELECT image from IMAGE where id = '$id'";
+	$imageString="";
+	
+	if(!$imageStmt = $db->con->prepare($imageQuery)){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		$imageStmt->execute();
+		$imageStmt->bind_result($imageString);
+		$imageStmt->fetch();
+		$imageStmt->close();
+		//$imageString = utf8_encode($imageString);
+		$imageString = base64_encode($imageString);
+	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
 	echo json_encode($output);
 	/*
 	$infoResult = mysqli_query($db->con,"SELECT username, password, first_name, last_name, email, gpa,
