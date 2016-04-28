@@ -7,7 +7,7 @@
 	$id = $idResult['id'];
 	
 	$infoQuery = "SELECT a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description
-					FROM users a, tutorInfo b
+					FROM USERS a, tutorInfo b
 					WHERE a.id='$id' AND b.id='$id'";
 					
 	if(!$infoStmt = $db->con->prepare($infoQuery)){
