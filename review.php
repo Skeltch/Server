@@ -1,6 +1,6 @@
 <?php 
 
-if(isset($_POST['title'] and $_POST['review'] and $_POST['rating'])){	
+if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating'])){	
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 	
@@ -24,8 +24,13 @@ if(isset($_POST['title'] and $_POST['review'] and $_POST['rating'])){
 	}
 	else{
 		//Temporary
-		echo "success"
+		echo "success";
 	}
+}
+else if (isset($_POST['id'])){
+	require_once __DIR__ .'/getImage.php';
+	$id = $_POST['id'];
+	getImage($id);	
 }
 
 

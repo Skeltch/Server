@@ -34,7 +34,20 @@
 			$outputClasses[] = $row;
 		}
 	}
-	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses);
+	//Creating a table just for images so select * statements are not affected by blob types
+	$imageQuery = "SELECT image from image where id = '$id'";
+	$imageString="";
+	
+	if(!$imageStmt = $db->con->prepare($imageQuery)){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		$imageStmt->execute();
+		$imageStmt->bind_result($imageString);
+		$imageStmt->fetch();
+		$imageStmt->close();
+		//$imageString = utf8_encode($imageString);
+		$imageString = base64_encode($imageString);
+	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
 	echo json_encode($output);
 	//Change to join
 	/*

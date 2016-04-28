@@ -6,9 +6,7 @@ if(isset($_POST['username'])){
 	
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("SELECT id, username, password, email, type, gpa,
-									first_name, last_name, graduation_year, dob, major
-									FROM USERS WHERE username = ?")){
+	if(!$stmt = $db->con->prepare("SELECT id FROM USERS WHERE username = ?")){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
 	if(!$stmt->bind_param("s", $username)){

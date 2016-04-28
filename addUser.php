@@ -26,13 +26,13 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("INSERT INTO USERS (id, username, password, email, 
+	if(!$stmt = $db->con->prepare("INSERT INTO USERS (id, username, encrypted_password, email, 
 									type, gpa, first_name, last_name, dob,
 									graduation_year, major) 
 									VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 	}
-	if(!$stmt->bind_param("ssssdsssis", $username, $password, $email, $type, $gpa, 
+	if(!$stmt->bind_param("ssssdsssis", $username, $encrypted_password, $email, $type, $gpa, 
 										$first_name, $last_name, $dob,
 										$graduation_year, $major)){
 		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -49,6 +49,8 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 	$dob = $_POST['dob'];
 	$graduation_year = $_POST['graduation_year'];
 	$major = $_POST['major'];
+	
+	$encrypted_password = password_hash($password, PASSWORD_DEFAULT);
 	
 	if(!$stmt->execute()){
 		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;

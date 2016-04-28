@@ -9,26 +9,46 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 	
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("SELECT id, username, password, type, first_name, last_name
-									FROM USERS WHERE username = ? AND password = ?")){
+	$checkQuery = "SELECT encrypted_password FROM USERS where username = ?";
+	
+	if(!$checkStmt = $db->con->prepare($checkQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
-	if(!$stmt->bind_param("ss", $username, $password)){
-		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-	}
-	
+	if(!$checkStmt->bind_param("s", $username)){
+	echo "Binding parameters failed: (" . $checkStmt->errno . ") " . $checkStmt->error;
+	}	
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	if(!$stmt->execute()){
-		echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-	}
-	$stmt->store_result();
-	if($stmt->num_rows>0){
-		$stmt->bind_result($userID, $username, $password, $role, $first_name, $last_name);
-		$stmt->fetch();
-		$output = array('result'=>'success' , 'id'=>$userID, 'role'=>$role, 'first_name'=>$first_name, 'last_name'=>$last_name);
-		echo json_encode($output);
-		exit;
+	$checkStmt->execute();
+	$checkStmt->bind_result($encrypted_password);
+	$checkStmt->fetch();
+	$checkStmt->close();
+	
+	if(password_verify($password,$encrypted_password)){
+	
+		if(!$stmt = $db->con->prepare("SELECT id, username, encrypted_password, type, first_name, last_name
+										FROM USERS WHERE username = ? AND encrypted_password = ?")){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		if(!$stmt->bind_param("ss", $username, $encrypted_password)){
+			echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+		}
+		
+		if(!$stmt->execute()){
+			echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+		}
+		$stmt->store_result();
+		if($stmt->num_rows>0){
+			$stmt->bind_result($userID, $username, $encrypted_password, $role, $first_name, $last_name);
+			$stmt->fetch();
+			$output = array('result'=>'success' , 'id'=>$userID, 'role'=>$role, 'first_name'=>$first_name, 'last_name'=>$last_name);
+			echo json_encode($output);
+			exit;
+		}
+		else{
+			$output = array('result'=>'Login Failed' , 'id'=>'null', 'role'=>'null');
+			echo json_encode($output);
+		}
 	}
 	else{
 		$output = array('result'=>'Login Failed' , 'id'=>'null', 'role'=>'null');
