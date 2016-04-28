@@ -20,7 +20,7 @@
 	
 	//Email and password require more verification to change
 	//PREPARE
-	$infoQuery = "UPDATE users
+	$infoQuery = "UPDATE USERS
 					SET gpa = COALESCE(?, gpa),
 					graduation_year = COALESCE(?, graduation_year),
 					major = COALESCE(?, major)
@@ -50,7 +50,7 @@
 			error_log($classes);
 			error_log(count($classesJSON));
 			error_log(json_encode($_POST['classes']));
-			if(!$classesStmt = $db->con->prepare("INSERT INTO classes (id, classes) VALUES (?,?)")){
+			if(!$classesStmt = $db->con->prepare("INSERT INTO CLASSES (id, classes) VALUES (?,?)")){
 				echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 			}
 			if(!$classesStmt->bind_param("is",$id,$classes)){
