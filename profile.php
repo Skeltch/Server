@@ -22,7 +22,7 @@
 		$tutorStmt->execute();
 		$tutorStmt->bind_result($description, $rating, $price);
 		$tutorStmt->fetch();
-		$outputInfo = array('username'=>$username, 'password'=>$password, 'first_name'=>$firstName,
+		$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
 						'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
 						'major'=>$major, 'description'=>$description);
 		$tutorStmt->close();
@@ -35,7 +35,7 @@
 		}
 	}
 	//Creating a table just for images so select * statements are not affected by blob types
-	$imageQuery = "SELECT image from image where id = '$id'";
+	$imageQuery = "SELECT image from IMAGE where id = '$id'";
 	$imageString="";
 	
 	if(!$imageStmt = $db->con->prepare($imageQuery)){

@@ -19,7 +19,8 @@ if(!$stmt->bind_param("iss", $id, $data, $data)){
 if(!$stmt->execute()){
 	echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
 }
-
+echo "success";
+/*
 $image = imagecreatefromstring($data);
 if(imagepng($image,$target_path)){
 	echo "success";
@@ -27,4 +28,5 @@ if(imagepng($image,$target_path)){
 else{
 	echo "failed";
 }
+*/
 ?>
