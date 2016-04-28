@@ -57,13 +57,45 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 	}
 	else{
 		if($type=='Tutor'){
-			$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM users WHERE username='$username'"));
+			if(!$tutorStmt = $db->con->prepare("Select id FROM USERS WHERE username = ?")){
+				echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+			}
+			if(!$tutorStmt->bind_param("s", $username)){
+				echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
+			}
+			if(!$tutorStmt->execute()){
+				echo "Execute failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
+			}
+			
+			$tutorStmt->bind_result($id);
+			$tutorStmt->fetch();
+			$tutorStmt->close();
+			/*
+			$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM USERS WHERE username='$username'"));
 			$id = $idResult['id'];	
+			*/
 			mysqli_query($db->con,"INSERT INTO tutorInfo (id) VALUES('$id')");
 		}
 		echo "success";
 		exit;
 	}
+			if(!$tutorStmt = $db->con->prepare($tutorQuery)){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		$tutorStmt->execute();
+		$tutorStmt->bind_result($description, $rating, $price);
+		$tutorStmt->fetch();
+		$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
+						'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
+						'major'=>$major, 'description'=>$description);
+		$tutorStmt->close();
+		
+		//Are prepared statements necessary here as all classes will be strings that we decide
+		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
+		$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
+		while($row = mysqli_fetch_assoc($resultClasses)){
+			$outputClasses[] = $row;
+		}
  
 	/*Testing
 	if(gettype($gpa)=="double"){
