@@ -14,6 +14,6 @@ function getImage($id){
 		$imageStmt->fetch();
 		$imageStmt->close();
 		$imageString = base64_encode($imageString);
-		return json_encode(array('imageString'=>$imageString));
+		return $imageString;
 }
 ?>

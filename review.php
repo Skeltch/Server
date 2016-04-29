@@ -32,19 +32,31 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	$reviewStmt->execute();
 	$reviewStmt->bind_result($ratings);
 	while($reviewStmt->fetch()){
-		$sum=$ratings;
+		$sum+=$ratings;
 		$size++;
 	}
 	$average = $sum/$size;
-	$reviewStmt->close();	
-	echo $average."success";
+	$reviewStmt->close();
+	$query = "UPDATE tutorInfo SET rating=? WHERE id='$tutorID'");
+	if(!$stmt = $db->con->prepare($query)){
+	echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
+	}
+	if(!$stmt->bind_param("d",$average)){
+		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+	}
+	if(!$stmt->execute()){
+		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
+	}
+	
+	echo "success";
 		//Add averaging the ratings and inserting into tutorInfo
 	}
 }
 else if (isset($_POST['id'])){
 	require_once __DIR__ .'/getImage.php';
 	$id = $_POST['id'];
-	$imageString = getImage($id);	
+	$imageString = getImage($id);
+	echo json_encode(array('imageString'=>$imageString));
 	//Add select statement to make sure user only has one review for each tutor.
 	//Also add so only tutees can leave reviews
 }
