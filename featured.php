@@ -6,7 +6,7 @@
 	$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM tutorInfo WHERE rating>=3 ORDER BY RAND() LIMIT 1"));
 	$id = $idResult['id'];
 	
-	$infoQuery = "SELECT a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description
+	$infoQuery = "SELECT a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description, b.rating
 					FROM USERS a, tutorInfo b
 					WHERE a.id='$id' AND b.id='$id'";
 					
@@ -15,10 +15,10 @@
 	}
 	$infoStmt->execute();
 	$infoStmt->bind_result($firstName, $lastName, $gpa,
-						$gradYear, $major, $description);
+						$gradYear, $major, $description, $rating);
 	$infoStmt->fetch();
 	$outputInfo = array('id'=>$id, 'first_name'=>$firstName, 'last_name'=>$lastName, 'gpa'=>$gpa, 
-						'graduation_year'=>$gradYear, 'major'=>$major, 'description'=>$description);
+						'graduation_year'=>$gradYear, 'major'=>$major, 'description'=>$description ,'rating'=>$rating);
 	$infoStmt->close();		
 	
 	$classesQuery ="SELECT * FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
