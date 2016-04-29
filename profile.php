@@ -14,6 +14,9 @@
 	$infoStmt->fetch();
 	$infoStmt->close();
 	$outputClasses = array();
+	$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
+				'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
+				'major'=>$major, 'description'=>$description);
 	if($role!="Tutee"){
 		$tutorQuery ="SELECT description, rating, price FROM tutorInfo WHERE id = '$id'";
 		if(!$tutorStmt = $db->con->prepare($tutorQuery)){
@@ -22,9 +25,6 @@
 		$tutorStmt->execute();
 		$tutorStmt->bind_result($description, $rating, $price);
 		$tutorStmt->fetch();
-		$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
-						'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-						'major'=>$major, 'description'=>$description);
 		$tutorStmt->close();
 		
 		//Are prepared statements necessary here as all classes will be strings that we decide
@@ -47,8 +47,8 @@
 		$imageStmt->close();
 		//$imageString = utf8_encode($imageString);
 		$imageString = base64_encode($imageString);
-	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
-	echo json_encode($output);
+		$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
+		echo json_encode($output);
 	//Change to join
 	/*
 	$infoResult = mysqli_query($db->con,"SELECT username, password, first_name, last_name, email, gpa,

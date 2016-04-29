@@ -4,20 +4,20 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating)) 
+	if(!$stmt = $db->con->prepare("INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating) 
 									VALUES (?, ?, ?, ?, ?, ?)")){
 		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 	}
-	if(!$stmt->bind_param("iisssf", $tutorID, $reviewerID, $name, $title, $review, $rating)){
+	if(!$stmt->bind_param("iisssd", $tutorID, $reviewerID, $name, $title, $review, $rating)){
 		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 	}
 
-	$tutorID = $_POST['tutorID'];
-	$reviewerID = $_POST['reviewerID'];
+	$tutorID = intval($_POST['tutorID']);
+	$reviewerID = intval($_POST['reviewerID']);
 	$name = $_POST['name'];
 	$title = $_POST['title'];
 	$review = $_POST['review'];
-	$rating = $_POST['rating'];
+	$rating = floatval($_POST['rating']);
 	
 	if(!$stmt->execute()){
 		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
@@ -25,12 +25,15 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	else{
 		//Temporary
 		echo "success";
+		//Add averaging the ratings and inserting into tutorInfo
 	}
 }
 else if (isset($_POST['id'])){
 	require_once __DIR__ .'/getImage.php';
 	$id = $_POST['id'];
-	getImage($id);	
+	$imageString = getImage($id);	
+	//Add select statement to make sure user only has one review for each tutor.
+	//Also add so only tutees can leave reviews
 }
 
 
