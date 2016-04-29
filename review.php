@@ -37,7 +37,7 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	}
 	$average = $sum/$size;
 	$reviewStmt->close();
-	$query = "UPDATE tutorInfo SET rating=? WHERE id='$tutorID'");
+	$query = "UPDATE tutorInfo SET rating=? WHERE id='$tutorID'";
 	if(!$stmt = $db->con->prepare($query)){
 	echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 	}

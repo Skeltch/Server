@@ -15,8 +15,8 @@
 	$infoStmt->close();
 	$outputClasses = array();
 	$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
-				'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-				'major'=>$major, 'description'=>$description);
+		'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
+		'major'=>$major);
 	if($role!="Tutee"){
 		$tutorQuery ="SELECT description, rating, price FROM tutorInfo WHERE id = '$id'";
 		if(!$tutorStmt = $db->con->prepare($tutorQuery)){
@@ -26,6 +26,10 @@
 		$tutorStmt->bind_result($description, $rating, $price);
 		$tutorStmt->fetch();
 		$tutorStmt->close();
+		//Overwrite if tutor
+		$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
+			'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
+			'major'=>$major, 'description'=>$description);
 		
 		//Are prepared statements necessary here as all classes will be strings that we decide
 		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
@@ -45,7 +49,6 @@
 		$imageStmt->bind_result($imageString);
 		$imageStmt->fetch();
 		$imageStmt->close();
-		//$imageString = utf8_encode($imageString);
 		$imageString = base64_encode($imageString);
 		$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
 		echo json_encode($output);

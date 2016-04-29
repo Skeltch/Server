@@ -7,6 +7,7 @@
 	$id = $_POST['id'];
 	
 	//Include email?
+	//Allow otherProfile to view tutee profiles as well?
 	$infoQuery = "SELECT a.username, a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description
 					FROM USERS a, tutorInfo b
 					WHERE a.id='$id' AND b.id='$id'";
