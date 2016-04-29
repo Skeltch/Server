@@ -41,7 +41,7 @@
 		$imageString = base64_encode($imageString);
 	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
 	echo json_encode($output);
-	
+	/*
 	$infoResult = mysqli_query($db->con,"SELECT username, password, first_name, last_name, email, gpa,
 										graduation_year, major FROM users WHERE id = '$id'") 
 										or die ("Error in selecting " . mysqli_error($db->con));
