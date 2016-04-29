@@ -8,7 +8,7 @@
 	
 	//Include email?
 	//Allow otherProfile to view tutee profiles as well?
-	$infoQuery = "SELECT a.username, a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description
+	$infoQuery = "SELECT a.username, a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description, b.rating
 					FROM USERS a, tutorInfo b
 					WHERE a.id='$id' AND b.id='$id'";
 	if(!$infoStmt = $db->con->prepare($infoQuery)){
@@ -16,11 +16,11 @@
 	}
 	$infoStmt->execute();
 	$infoStmt->bind_result($username, $firstName, $lastName, $gpa,
-						$gradYear, $major, $description);
+						$gradYear, $major, $description, $rating);
 	$infoStmt->fetch();
 	$outputInfo = array('username'=>$username, 'first_name'=>$firstName,
 						'last_name'=>$lastName, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-						'major'=>$major, 'description'=>$description);
+						'major'=>$major, 'description'=>$description, 'rating'=>$rating);
 	$infoStmt->close();
 					
 	$classesQuery ="SELECT * FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
