@@ -24,7 +24,20 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	}
 	else{
 		//Temporary
-		echo "success";
+		$reviewQuery = "SELECT rating FROM REVIEW WHERE tutorID='$tutorID'";
+	if(!$reviewStmt = $db->con->prepare($reviewQuery)){
+		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+	}
+	$size=0;
+	$reviewStmt->execute();
+	$reviewStmt->bind_result($ratings);
+	while($reviewStmt->fetch()){
+		$sum=$ratings;
+		$size++;
+	}
+	$average = $sum/$size;
+	$reviewStmt->close();	
+	echo $average."success";
 		//Add averaging the ratings and inserting into tutorInfo
 	}
 }
