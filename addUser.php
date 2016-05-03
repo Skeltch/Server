@@ -95,13 +95,14 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		exit;
 		*/
 	}
+	/*
 			if(!$tutorStmt = $db->con->prepare($tutorQuery)){
 			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 		}
 		$tutorStmt->execute();
 		$tutorStmt->bind_result($description, $rating, $price);
 		$tutorStmt->fetch();
-		$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
+		$outputInfo = array('username'=>$username, 'first_name'=>$firstName,
 						'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
 						'major'=>$major, 'description'=>$description);
 		$tutorStmt->close();
