@@ -24,11 +24,12 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	}
 	else{
 		//Temporary
-		$reviewQuery = "SELECT rating FROM REVIEW WHERE tutorID='$tutorID'";
+	$reviewQuery = "SELECT rating FROM REVIEW WHERE tutorID='$tutorID'";
 	if(!$reviewStmt = $db->con->prepare($reviewQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
 	$size=0;
+	$sum=0;
 	$reviewStmt->execute();
 	$reviewStmt->bind_result($ratings);
 	while($reviewStmt->fetch()){
@@ -48,17 +49,33 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
 	}
 	
-	echo "success";
+	echo json_encode(array('activity'=>"review"));
 		//Add averaging the ratings and inserting into tutorInfo
 	}
 }
-else if (isset($_POST['id'])){
-	require_once __DIR__ .'/getImage.php';
-	$id = $_POST['id'];
-	$imageString = getImage($id);
-	echo json_encode(array('imageString'=>$imageString));
-	//Add select statement to make sure user only has one review for each tutor.
-	//Also add so only tutees can leave reviews
+else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
+	require_once __DIR__ . '/database_handler.php';
+	$db = new database_handler();
+	$review = "SELECT * FROM REVIEW WHERE reviewerID=?";
+	if(!$stmt = $db->con->prepare($review)){
+		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+	}
+	if(!$stmt->bind_param("s", $reviewerID)){
+		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+	}
+	$reviewerID = $_POST['reviewerID'];
+	if(!$stmt->execute()){
+		echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+	}
+	if(mysqli_stmt_get_result($stmt)->num_rows>0){
+		echo json_encode(array('activity'=>"redirect"));
+	}
+	else{
+		require_once __DIR__ .'/getImage.php';
+		$id = $_POST['tutorID'];
+		$imageString = getImage($id);
+		echo json_encode(array('imageString'=>$imageString));
+	}
 }
 
 

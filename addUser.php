@@ -76,7 +76,19 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 			*/
 			mysqli_query($db->con,"INSERT INTO tutorInfo (id) VALUES('$id')");
 		}
-		echo "success";
+		$to = $email;
+		$subject = "Confirmation Email for TutorU";
+		$txt = "This email is just to notify you that this email has been used for registration. If this was not you click on the link provided and we will remove their account from our database.\n Thanks for registering for TutorU!";
+		$headers = "From: RutgersTutorU@gmail.com" . "\r\n" .
+		"Reply-To: RutgersTutorU@gmail.com" . "\r\n" .
+		"X-Mailer: PHP/" . phpversion();
+		print phpinfo();
+		if(mail($to,$subject,$txt,$headers)){
+				echo "success";
+		}
+		else{
+				echo "failed";
+		}
 		exit;
 	}
 			if(!$tutorStmt = $db->con->prepare($tutorQuery)){
