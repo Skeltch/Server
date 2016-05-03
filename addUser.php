@@ -78,7 +78,8 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		}
 		$to = $email;
 		$subject = "Confirmation Email for TutorU";
-		$txt = "This email is just to notify you that this email has been used for registration. If this was not you click on the link provided and we will remove their account from our database.\n Thanks for registering for TutorU!";
+		$txt = "This email is just to notify you that this email has been used for registration. If this was not you click on the link provided and we will remove their account from our database.\n
+		tutoru.mooo.com/confirm?key='$encrypted_password'"."\n\nThanks for registering for TutorU!";
 		$headers = "From: RutgersTutorU@gmail.com" . "\r\n" .
 		"Reply-To: RutgersTutorU@gmail.com" . "\r\n" .
 		"X-Mailer: PHP/" . phpversion();
