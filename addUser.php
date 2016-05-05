@@ -76,11 +76,11 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 			*/
 			mysqli_query($db->con,"INSERT INTO tutorInfo (id) VALUES('$id')");
 		}
-		echo "success";
-		/*
+		//exec("/usr/bin/php5 -f /var/www/html/email.php > /dev/null &")
 		$to = $email;
 		$subject = "Confirmation Email for TutorU";
 		$txt = "This email is just to notify you that this email has been used for registration. If this was not you click on the link provided and we will remove their account from our database.\n
+		**ONLY CLICK THIS TO DELETE YOUR ACCOUNT**\n
 		tutoru.mooo.com/confirm.php?key=$encrypted_password"."\n\nThanks for registering for TutorU!";
 		$headers = "From: RutgersTutorU@gmail.com" . "\r\n" .
 		"Reply-To: RutgersTutorU@gmail.com" . "\r\n" .
@@ -92,8 +92,7 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		else{
 				echo "failed";
 		}
-		exit;
-		*/
+		//echo "success";
 	}
 	/*
 			if(!$tutorStmt = $db->con->prepare($tutorQuery)){
@@ -222,8 +221,8 @@ input[type=number]::-webkit-outer-spin-button {
 </tr>
 </table>
 </form>
+</body>
+</html>
 <?php
 }
 ?>
-</body>
-</html>
