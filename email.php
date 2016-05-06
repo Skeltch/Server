@@ -16,5 +16,4 @@ error_reporting(E_ALL);
  else{
          echo "failed";
  }
-}		
 ?>

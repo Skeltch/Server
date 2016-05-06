@@ -56,20 +56,22 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
 	}
 	else{
+		if(!$idStmt = $db->con->prepare("Select id FROM USERS WHERE username = ?")){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		if(!$idStmt->bind_param("s", $username)){
+			echo "Binding parameters failed: (" . $idStmt->errno . ") " . $idStmt->error;
+		}
+		if(!$idStmt->execute()){
+			echo "Execute failed: (" . $idStmt->errno . ") " . $idStmt->error;
+		}
+		
+		$idStmt->bind_result($id);
+		$idStmt->fetch();
+		$idStmt->close();
+		//Insert into temp and delete when user confirms email
+		mysqli_query($db->con, "INSERT INTO temp(id,key) VALUES('$id','$encrypted_password')");
 		if($type=='Tutor'){
-			if(!$tutorStmt = $db->con->prepare("Select id FROM USERS WHERE username = ?")){
-				echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
-			}
-			if(!$tutorStmt->bind_param("s", $username)){
-				echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
-			}
-			if(!$tutorStmt->execute()){
-				echo "Execute failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
-			}
-			
-			$tutorStmt->bind_result($id);
-			$tutorStmt->fetch();
-			$tutorStmt->close();
 			/*
 			$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM USERS WHERE username='$username'"));
 			$id = $idResult['id'];	
@@ -78,8 +80,7 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		}
 		$to = $email;
 		$subject = "TutorU Email Notification";
-		$txt = "This email is just to notify you that this email has been used for registration. If this was not you click on the link provided and we will remove their account from our database.\n
-		**ONLY CLICK THIS TO DELETE YOUR ACCOUNT**\n
+		$txt = "This email is just to notify you that this email has been used for registration. Click on the provided link to confirm your account.
 		tutoru.mooo.com/confirm.php?key=$encrypted_password"."\n\nThanks for registering for TutorU!";
 		$headers = "From: RutgersTutorU@gmail.com" . "\r\n" .
 		"Reply-To: RutgersTutorU@gmail.com" . "\r\n" .
@@ -109,35 +110,7 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		*/
 		//echo "success";
 	}
-	/*
-			if(!$tutorStmt = $db->con->prepare($tutorQuery)){
-			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
-		}
-		$tutorStmt->execute();
-		$tutorStmt->bind_result($description, $rating, $price);
-		$tutorStmt->fetch();
-		$outputInfo = array('username'=>$username, 'first_name'=>$firstName,
-						'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-						'major'=>$major, 'description'=>$description);
-		$tutorStmt->close();
-		
-		//Are prepared statements necessary here as all classes will be strings that we decide
-		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
-		$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
-		while($row = mysqli_fetch_assoc($resultClasses)){
-			$outputClasses[] = $row;
-		}
- 
-	/*Testing
-	if(gettype($gpa)=="double"){
-	$result = mysqli_query($db->con,"INSERT INTO TEST (num) VALUES (NULL)");
-	*/
 }
-/*
-else{
-	echo "No inputs";
-}
-*/
 else{
 	?>
 <!--For browser testing-->
