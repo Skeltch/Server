@@ -22,37 +22,38 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	if(!$stmt->execute()){
 		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
 	}
+	//Inserting has not failed so update the tutor's average rating
 	else{
-		//Temporary
-	$reviewQuery = "SELECT rating FROM REVIEW WHERE tutorID='$tutorID'";
-	if(!$reviewStmt = $db->con->prepare($reviewQuery)){
-		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
-	}
-	$size=0;
-	$sum=0;
-	$reviewStmt->execute();
-	$reviewStmt->bind_result($ratings);
-	while($reviewStmt->fetch()){
-		$sum+=$ratings;
-		$size++;
-	}
-	$average = $sum/$size;
-	$reviewStmt->close();
-	$query = "UPDATE tutorInfo SET rating=? WHERE id='$tutorID'";
-	if(!$stmt = $db->con->prepare($query)){
-	echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
-	}
-	if(!$stmt->bind_param("d",$average)){
-		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-	}
-	if(!$stmt->execute()){
-		echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
-	}
-	
-	echo json_encode(array('activity'=>"review"));
-		//Add averaging the ratings and inserting into tutorInfo
+		$reviewQuery = "SELECT rating FROM REVIEW WHERE tutorID='$tutorID'";
+		if(!$reviewStmt = $db->con->prepare($reviewQuery)){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		$size=0;
+		$sum=0;
+		$reviewStmt->execute();
+		$reviewStmt->bind_result($ratings);
+		while($reviewStmt->fetch()){
+			$sum+=$ratings;
+			$size++;
+		}
+		$average = $sum/$size;
+		$reviewStmt->close();
+		$query = "UPDATE tutorInfo SET rating=? WHERE id='$tutorID'";
+		if(!$stmt = $db->con->prepare($query)){
+		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
+		}
+		if(!$stmt->bind_param("d",$average)){
+			echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+		}
+		if(!$stmt->execute()){
+			echo "Execute failed: (" .$stmt->errno . ") " . $stmt->error;
+		}
+		
+		echo json_encode(array('activity'=>"review"));
 	}
 }
+//This is when the user first enters the activity so we need to retrieve the information, i.e. the tutor's profile picture
+//This also does a check to see if the user has left a review before, if they have it will redirect them 
 else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();

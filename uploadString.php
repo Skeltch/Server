@@ -4,6 +4,8 @@ ini_set('display_errors',1);
 require_once __DIR__ . '/database_handler.php';
 $db = new database_handler();
 
+//Upload image as a string
+
 $target_path = 'uploads/';
 $id = $_POST['id'];
 $target_path = $target_path . $id . ".bmp";
@@ -22,6 +24,8 @@ if(!$stmt->execute()){
 echo "success";
 
 /*
+//This is used if we want to store the image on the server and the location to the image in the database 
+//This is ideal for scaling however storing largeblobs on a smaller scale is not an issue
 $image = imagecreatefromstring($data);
 if(imagepng($image,$target_path)){
 	echo "success";

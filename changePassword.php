@@ -1,8 +1,10 @@
 <?php 
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
+	//Script called when the user wants to change passwords 
 	
 	if(isset($_POST['password'])){
+		//Query to get encrypted password from user
 		$checkQuery = "SELECT encrypted_password FROM USERS where id = ?";
 		
 		if(!$checkStmt = $db->con->prepare($checkQuery)){
@@ -17,7 +19,7 @@
 		$checkStmt->fetch();
 		$checkStmt->close();
 		$password=$_POST['password'];
-		
+		//Verify they are equal
 		if(password_verify($password,$encrypted_password)){
 			echo "success";
 		}
@@ -25,6 +27,7 @@
 			echo "failed";
 		}
 	}
+	//Update with new password since the old password was verified to be equal
 	else if(isset($_POST['newPassword'])){
 		$password = $_POST['newPassword'];
 		$id = $_POST['id'];

@@ -26,7 +26,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 	
 	if(password_verify($password,$encrypted_password)){
 	
-		if(!$stmt = $db->con->prepare("SELECT id, username, encrypted_password, type, first_name, last_name, verified
+		if(!$stmt = $db->con->prepare("SELECT id, username, encrypted_password, type, first_name, last_name
 										FROM USERS WHERE username = ? AND encrypted_password = ?")){
 			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 		}
@@ -39,7 +39,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 		}
 		$stmt->store_result();
 		if($stmt->num_rows>0){
-			$stmt->bind_result($userID, $username, $encrypted_password, $role, $first_name, $last_name, $verified);
+			$stmt->bind_result($userID, $username, $encrypted_password, $role, $first_name, $last_name);
 			$stmt->fetch();
 			$output = array('result'=>'success' , 'id'=>$userID, 'role'=>$role, 'first_name'=>$first_name, 'last_name'=>$last_name);
 			echo json_encode($output);

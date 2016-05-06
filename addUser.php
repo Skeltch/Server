@@ -15,7 +15,6 @@ gpa				double(4,3)
 dob				date
 graduation date	int(4)
 major			string
-optional resume	not implemented
 */
 if (isset($_POST['username']) 			&& isset($_POST['password']) 
 	&& isset($_POST['email']) 			&& isset($_POST['type']) 
@@ -70,7 +69,7 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		$idStmt->fetch();
 		$idStmt->close();
 		//Insert into temp and delete when user confirms email
-		mysqli_query($db->con, "INSERT INTO temp(id,key) VALUES('$id','$encrypted_password')");
+		mysqli_query($db->con, "INSERT INTO temp(id,`key`,time) VALUES('$id','$encrypted_password',NOW())");
 		if($type=='Tutor'){
 			/*
 			$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM USERS WHERE username='$username'"));
@@ -91,24 +90,6 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		else{
 			 echo "failed";
 		}
-		/*
-		$to = $email;
-		$subject = "Confirmation Email for TutorU";
-		$txt = "This email is just to notify you that this email has been used for registration. If this was not you click on the link provided and we will remove their account from our database.\n
-		**ONLY CLICK THIS TO DELETE YOUR ACCOUNT**\n
-		tutoru.mooo.com/confirm.php?key=$encrypted_password"."\n\nThanks for registering for TutorU!";
-		$headers = "From: RutgersTutorU@gmail.com" . "\r\n" .
-		"Reply-To: RutgersTutorU@gmail.com" . "\r\n" .
-		"X-Mailer: PHP/" . phpversion();
-		
-		if(mail($to,$subject,$txt,$headers)){
-				echo "success";
-		}
-		else{
-				echo "failed";
-		}
-		*/
-		//echo "success";
 	}
 }
 else{

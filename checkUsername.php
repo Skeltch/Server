@@ -16,6 +16,7 @@ if(isset($_POST['username'])){
 	if(!$stmt->execute()){
 		echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 	}
+	//Any usernames found in table
 	if(mysqli_stmt_get_result($stmt)->num_rows>0){
 		echo "Username Taken";
 	}

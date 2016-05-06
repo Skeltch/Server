@@ -4,7 +4,8 @@ $key = $_GET['key'];
 require_once __DIR__ . '/database_handler.php';
 
 $db = new database_handler();
-$query = "DELETE FROM temp WHERE key = ?";
+//Remove user from temp so scheduled task does not delete their account
+$query = "DELETE FROM temp WHERE `key` = ?";
 	if(!$stmt = $db->con->prepare($query)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}

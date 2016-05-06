@@ -2,7 +2,7 @@
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(E_ALL);
-
+//Script to test email service
  $to = "scheung901@gmail.com";
  $subject = "My subject";
  $txt = "Hello world!";

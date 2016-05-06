@@ -67,7 +67,6 @@
 	if(!$tutorStmt->bind_param("s", $description)){
 		echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
 	}
-	//Add email and password change support
 	if(!$infoStmt->bind_param("dis", $gpa, $gradYear, $major)){
 		echo "Binding parameters failed (" . $infoStmt->errno . ") " . $infoStmt->error;
 	}
