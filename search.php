@@ -14,7 +14,8 @@ if(isset($_POST['rating'])){
 if(isset($_POST['price'])){
 	$price = $_POST['price'];
 }
-$searchQuery = "SELECT * FROM CLASSES WHERE classes = ?";
+//Order by id since the users table is automatically ordered by id since it is auto incrementing
+$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? ORDER BY id";
 if(!$stmt = mysqli_prepare($db->con, $searchQuery)){
 	echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 }
@@ -34,7 +35,9 @@ if($stmt->execute()){
 	}
 	$idQuery.=")";
 	$stmt->close();
-	$infoQuery = "SELECT USERS.first_name, USERS.last_name, USERS.gpa, USERS.graduation_year, USERS.major,tutorInfo.description, tutorInfo.rating FROM USERS, tutorInfo WHERE USERS.id in " .$idQuery . " and USERS.id=tutorInfo.id";
+	//This query joins the tables and selects from both tables where it matches the id in the query for both tables
+	$infoQuery = "SELECT USERS.first_name, USERS.last_name, USERS.gpa, USERS.graduation_year, USERS.major,tutorInfo.description, tutorInfo.rating 
+					FROM USERS, tutorInfo WHERE USERS.id in " .$idQuery . " and USERS.id=tutorInfo.id";
 	/*
 	$infoQuery = "SELECT a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description, b.rating
 				FROM USERS a, tutorInfo b
