@@ -20,8 +20,8 @@ Created and debugged by Samuel Cheung
 
 	if(!$tutorStmt = $db->con->prepare("UPDATE tutorInfo
 									SET 
-									description = COALESCE(?, description)
-									price = COALESCE(?, price);
+									description = COALESCE(?, description),
+									price = COALESCE(?, price)
 									WHERE id = '$id'")){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}

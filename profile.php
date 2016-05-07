@@ -33,7 +33,7 @@ Created and debugged by Samuel Cheung
 		//Overwrite if tutor
 		$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
 			'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-			'major'=>$major, 'dob'=>$dob, 'description'=>$description, 'rating'=>$rating);
+			'major'=>$major, 'dob'=>$dob, 'description'=>$description, 'rating'=>$rating, 'price'=>$price);
 		
 		//Are prepared statements necessary here as all classes will be strings that we decide
 		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";

@@ -9,7 +9,7 @@ Created and debugged by Samuel Cheung
 	$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM tutorInfo WHERE rating>=3 ORDER BY RAND() LIMIT 1"));
 	$id = $idResult['id'];
 	//Retrieve information from user and tutorinfo
-	$infoQuery = "SELECT a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description, b.rating
+	$infoQuery = "SELECT a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description, b.rating, b.price
 					FROM USERS a, tutorInfo b
 					WHERE a.id='$id' AND b.id='$id'";
 					
@@ -18,10 +18,10 @@ Created and debugged by Samuel Cheung
 	}
 	$infoStmt->execute();
 	$infoStmt->bind_result($firstName, $lastName, $gpa,
-						$gradYear, $major, $description, $rating);
+						$gradYear, $major, $description, $rating, $price);
 	$infoStmt->fetch();
 	$outputInfo = array('id'=>$id, 'first_name'=>$firstName, 'last_name'=>$lastName, 'gpa'=>$gpa, 
-						'graduation_year'=>$gradYear, 'major'=>$major, 'description'=>$description ,'rating'=>$rating);
+						'graduation_year'=>$gradYear, 'major'=>$major, 'description'=>$description ,'rating'=>$rating, 'price'=>$price);
 	$infoStmt->close();		
 	
 	$classesQuery ="SELECT * FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
