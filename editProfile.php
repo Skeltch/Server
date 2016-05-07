@@ -9,7 +9,8 @@ Created and debugged by Samuel Cheung
 	
 	//PREPARE
 	$infoQuery = "UPDATE USERS
-					SET gpa = COALESCE(?, gpa),
+					SET 
+					gpa = COALESCE(?, gpa),
 					graduation_year = COALESCE(?, graduation_year),
 					major = COALESCE(?, major)
 					WHERE id = '$id'";
@@ -18,7 +19,9 @@ Created and debugged by Samuel Cheung
 	}
 
 	if(!$tutorStmt = $db->con->prepare("UPDATE tutorInfo
-									SET description = COALESCE(?, description)
+									SET 
+									description = COALESCE(?, description)
+									price = COALESCE(?, price);
 									WHERE id = '$id'")){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
@@ -52,7 +55,7 @@ Created and debugged by Samuel Cheung
 
 	
 	//BIND_PARAM
-	if(!$tutorStmt->bind_param("s", $description)){
+	if(!$tutorStmt->bind_param("ss", $description, $price)){
 		echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
 	}
 	if(!$infoStmt->bind_param("dis", $gpa, $gradYear, $major)){
@@ -65,17 +68,17 @@ Created and debugged by Samuel Cheung
 	$email='';
 	$gpa='';
 	$major='';
+	$price='';
 	if(isset($_POST['description'])){
 		$description = $_POST['description'];
-		echo $description;
 	}	
-
+	if(isset($_POST['price'])){
+		$price = $_POST['price'];
+	}
 	
 	if(isset($_POST['password'])){
 		$password=$_POST['password'];
 	}
-	$email=$_POST['email'];
-	
 
 	if(isset($_POST['graduation_year'])){
 		$gradYear=$_POST['graduation_year'];

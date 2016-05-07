@@ -56,6 +56,6 @@ if($stmt->execute()){
 		$i++;
 	}
 	$infoStmt->close();		
-	echo json_encode(array('info'=>$outputInfo));
+	echo json_encode($outputInfo);
 }
 ?>

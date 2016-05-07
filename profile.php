@@ -20,7 +20,7 @@ Created and debugged by Samuel Cheung
 	$outputClasses = array();
 	$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
 		'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-		'major'=>$major);
+		'major'=>$major, 'dob'=>$dob);
 	if($role!="Tutee"){
 		$tutorQuery ="SELECT description, rating, price FROM tutorInfo WHERE id = '$id'";
 		if(!$tutorStmt = $db->con->prepare($tutorQuery)){
@@ -33,7 +33,7 @@ Created and debugged by Samuel Cheung
 		//Overwrite if tutor
 		$outputInfo = array('username'=>$username, /*'password'=>$password,*/ 'first_name'=>$firstName,
 			'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-			'major'=>$major, 'description'=>$description, 'rating'=>$rating);
+			'major'=>$major, 'dob'=>$dob, 'description'=>$description, 'rating'=>$rating);
 		
 		//Are prepared statements necessary here as all classes will be strings that we decide
 		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
