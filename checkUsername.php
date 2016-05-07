@@ -1,5 +1,8 @@
 <?php 
-
+/*
+Script used to check uniqueness of username when user is registering
+Created and debugged by Samuel Cheung
+*/
 if(isset($_POST['username'])){
 	
 	require_once __DIR__ . '/database_handler.php';

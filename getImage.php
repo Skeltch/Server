@@ -1,5 +1,8 @@
 <?php 
-
+/*
+Generic function to get profile picture
+Created and debugged by Samuel Cheung
+*/
 function getImage($id){
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();

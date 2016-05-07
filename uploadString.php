@@ -1,4 +1,8 @@
 <?php 
+/*
+Script used to store the profile picture of a user in a largeblob
+Created and debugged by Samuel Cheung
+*/
 error_reporting(E_ALL);
 ini_set('display_errors',1);
 require_once __DIR__ . '/database_handler.php';

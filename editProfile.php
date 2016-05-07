@@ -1,24 +1,12 @@
 <?php
+/*
+Script used to update user profile information
+Created and debugged by Samuel Cheung
+*/
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
-	
-	//Inserting into original user table
-	/*
-	while($tutorInfo = mysqli_fetch_assoc(mysqli_query($db->con,"SELECT classes, description FROM tutorInfo WHERE id = '$id'"))){
-			$row[]=$tutorInfo;
-	}
-	foreach($rows as $arrays){
-		if($arrays['classes']!=$_POST['classes']){
-			$insert[]=$arrays['classes'];
-		}
-	}
-	*/
-	//Create upperbound for number of classes to avoid abuse (20? Example error mesage:
-	//"To keep things fair the limit for classes you can tutor in is x")
-	//Method to remove rows (Possibly delete all rows and reinsert them)
 	$id = intval($_POST['id']);
 	
-	//Email and password require more verification to change
 	//PREPARE
 	$infoQuery = "UPDATE USERS
 					SET gpa = COALESCE(?, gpa),

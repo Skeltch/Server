@@ -1,4 +1,8 @@
 <?php
+/*
+Test file currently not being used
+Created and debugged by Samuel Cheung
+*/
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 

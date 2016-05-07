@@ -1,4 +1,8 @@
 <?php
+/*
+Script used to login from the mainscreenactivity
+Created and debugged by Samuel Cheung
+*/
 error_reporting(E_ALL);
 ini_set('display_errors',1);
 //Checking credentials

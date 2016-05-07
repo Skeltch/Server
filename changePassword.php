@@ -1,7 +1,10 @@
 <?php 
+/*
+Script used to change password by request of user 
+Created and debugged by Samuel Cheung
+*/
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
-	//Script called when the user wants to change passwords 
 	
 	if(isset($_POST['password'])){
 		//Query to get encrypted password from user

@@ -1,5 +1,8 @@
 <?php 
-
+/*
+Script called when user confirms their email
+Created and debugged by Samuel Cheung
+*/
 $key = $_GET['key'];
 require_once __DIR__ . '/database_handler.php';
 

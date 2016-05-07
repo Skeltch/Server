@@ -1,5 +1,8 @@
 <?php
-
+/*
+Script called by CRON
+Created and debugged by Samuel Cheung
+*/
 require_once __DIR__ .'/database_handler.php';
 $db = new database_handler();
 

@@ -1,7 +1,8 @@
 <?php
  
 /**
- * A class file to handle all database interactions
+ *A class file to handle all database interactions
+ *Created and debugged by Samuel Cheung
  */
 class database_handler {
 	//Connection pointer

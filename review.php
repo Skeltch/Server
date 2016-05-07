@@ -1,5 +1,10 @@
 <?php 
-
+/*
+Script used to deal with the review activity
+Initially checks to see whether the user has left a review before or not and load the profile picture 
+Inserts review into the review table when submitted
+Created and debugged by Samuel Cheung
+*/
 if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating'])){	
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();

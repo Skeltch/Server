@@ -1,5 +1,8 @@
 <?php 
-
+/*
+Check uniquness of email when user is registering
+Created and debugged by Samuel Cheung
+*/
 if(isset($_POST['email'])){
 	
 	require_once __DIR__ . '/database_handler.php';

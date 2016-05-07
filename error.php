@@ -1,5 +1,5 @@
 <?php 
-
+//Created and debugged by Samuel Cheung
 //Script to log errors send by applications
 //This will be useful if we send the app out to other people so we can debug easily
 $thread = $_POST['thread'];

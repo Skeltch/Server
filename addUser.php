@@ -2,6 +2,7 @@
 /*
  * Following code will create a new user row
  * All user details are read from HTTP Post Request
+ * Created and debugged by Samuel Cheung
  */
   
 // check for required fields

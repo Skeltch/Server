@@ -1,4 +1,8 @@
 <?php
+/*
+Script used for main page to show a featured tutor
+Created and debugged by Samuel Cheung
+*/
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 	
