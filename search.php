@@ -8,14 +8,18 @@ require_once __DIR__ .'/database_handler.php';
 $db = new database_handler();
 
 $class = $_GET['class'];
+$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? ORDER BY id";
 if(isset($_POST['rating'])){
 	$rating = $_POST['rating'];
+	//Currently not completely implemented because the cards don't work
+	$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? AND rating>? ORDER BY id";
 }
 if(isset($_POST['price'])){
 	$price = $_POST['price'];
+	//Currently not completely implemented because the cards don't work
+	$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? AND price<? ORDER BY id";
 }
 //Order by id since the users table is automatically ordered by id since it is auto incrementing
-$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? ORDER BY id";
 if(!$stmt = mysqli_prepare($db->con, $searchQuery)){
 	echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 }

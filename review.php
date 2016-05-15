@@ -77,10 +77,19 @@ else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
 		echo json_encode(array('activity'=>"redirect"));
 	}
 	else{
-		require_once __DIR__ .'/getImage.php';
 		$id = $_POST['tutorID'];
-		$imageString = getImage($id);
-		echo json_encode(array('imageString'=>$imageString));
+		$reviewerQuery = "SELECT IMAGE.image, USERS.first_name, USERS.last_name from IMAGE, USERS where IMAGE.id = '$id' and USERS.id='$id'";
+		$imageString="";
+		if(!$imageStmt = $db->con->prepare($reviewerQuery)){
+				echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+			}
+		$imageStmt->execute();
+		$imageStmt->bind_result($imageString, $firstName, $lastName);
+		$imageStmt->fetch();
+		$imageStmt->close();
+		$imageString = base64_encode($imageString);
+		return $imageString;
+		echo json_encode(array('imageString'=>$imageString, 'first_name'=>$firstName, 'last_name'=>$lastName));
 	}
 }
 
