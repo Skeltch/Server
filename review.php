@@ -88,7 +88,6 @@ else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
 		$imageStmt->fetch();
 		$imageStmt->close();
 		$imageString = base64_encode($imageString);
-		return $imageString;
 		echo json_encode(array('imageString'=>$imageString, 'first_name'=>$firstName, 'last_name'=>$lastName));
 	}
 }
