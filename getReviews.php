@@ -5,7 +5,7 @@ Created and debugged by Samuel Cheung
 */
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
-	$id = $_GET['id'];
+	$id = $_POST['id'];
 	$reviewQuery = "SELECT * FROM REVIEW WHERE tutorID = $id";
 	if(!$reviewStmt = $db->con->prepare($reviewQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
