@@ -42,7 +42,10 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
     $email = $_POST['email'];
 	$type = $_POST['type'];
 	$gpa = $_POST['gpa'];
-	if($gpa!="NULL"){
+	if($gpa=="NULL"){
+		$gpa=null;
+	}
+	else{
 		$gpa = floatval($gpa);
 		$gpa = (float)$gpa;
 	}
@@ -50,6 +53,9 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 	$last_name = $_POST['last_name'];
 	$dob = $_POST['dob'];
 	$graduation_year = $_POST['graduation_year'];
+	if($graduation_year=="NULL"){
+		$graduation_year=null;
+	}
 	$major = $_POST['major'];
 	
 	$encrypted_password = password_hash($password, PASSWORD_DEFAULT);
