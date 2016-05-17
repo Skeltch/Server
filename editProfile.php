@@ -99,8 +99,11 @@ Created and debugged by Samuel Cheung
 		echo "Execute failed: (" .$infoStmt->errno . ") " . $infoStmt->error;
 	}
 	else{
-		if($_POST['gpa']=="null"){
+		if($_POST['gpa']=="NULL"){
 			mysqli_query($db->con, "UPDATE USERS SET gpa=NULL WHERE id = $id");
+		}
+		if($_POST['graduation_year']=="NULL"){
+			mysqli_query($db->con, "UPDATE USERS SET graduation_year=NULL WHERE id = $id");
 		}
 		echo "success";
 		exit;
