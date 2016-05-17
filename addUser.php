@@ -21,7 +21,7 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 	&& isset($_POST['email']) 			&& isset($_POST['type']) 
 	/*&& isset($_POST['gpa'])*/			&& isset($_POST['first_name'])
 	&& isset($_POST['last_name'])		&& isset($_POST['dob'])
-	&& isset($_POST['graduation_year'])	&& isset($_POST['major'])) {
+	/*&& isset($_POST['graduation_year'])*/	&& isset($_POST['major'])) {
 	
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
@@ -134,7 +134,7 @@ input[type=number]::-webkit-outer-spin-button {
 <tr>
 <td width="250">GPA</td>
 <td>
-<input name="gpa" required type="number" step=".001" min="0" max="4" maxlength="4" id="gpa">
+<input name="gpa" type="number" step=".001" min="0" max="4" maxlength="4" id="gpa">
 </td>
 </tr>
 <tr>
@@ -171,7 +171,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 <td width="250">Graduation Year</td>
 <td>
-<input name="graduation_year" required type="number" id="graduation_year" maxlength="4">
+<input name="graduation_year" type="number" id="graduation_year" maxlength="4">
 </td>
 </tr>
 
