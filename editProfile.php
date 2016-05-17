@@ -83,6 +83,7 @@ Created and debugged by Samuel Cheung
 	if(isset($_POST['graduation_year'])){
 		$gradYear=$_POST['graduation_year'];
 	}
+	echo $_POST['gpa'];
 	if(isset($_POST['gpa'])){
 		$gpa=$_POST['gpa'];
 	}
@@ -98,6 +99,9 @@ Created and debugged by Samuel Cheung
 		echo "Execute failed: (" .$infoStmt->errno . ") " . $infoStmt->error;
 	}
 	else{
+		if($_POST['gpa']=="null"){
+			mysqli_query($db->con, "UPDATE USERS SET gpa=NULL WHERE id = $id");
+		}
 		echo "success";
 		exit;
 	}

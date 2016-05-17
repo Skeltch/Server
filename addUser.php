@@ -19,7 +19,7 @@ major			string
 */
 if (isset($_POST['username']) 			&& isset($_POST['password']) 
 	&& isset($_POST['email']) 			&& isset($_POST['type']) 
-	&& isset($_POST['gpa']) 			&& isset($_POST['first_name'])
+	/*&& isset($_POST['gpa'])*/			&& isset($_POST['first_name'])
 	&& isset($_POST['last_name'])		&& isset($_POST['dob'])
 	&& isset($_POST['graduation_year'])	&& isset($_POST['major'])) {
 	
@@ -42,8 +42,10 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
     $email = $_POST['email'];
 	$type = $_POST['type'];
 	$gpa = $_POST['gpa'];
-	$gpa = floatval($gpa);
-	$gpa = (float)$gpa;
+	if($gpa!="NULL"){
+		$gpa = floatval($gpa);
+		$gpa = (float)$gpa;
+	}
 	$first_name = $_POST['first_name'];
 	$last_name = $_POST['last_name'];
 	$dob = $_POST['dob'];
