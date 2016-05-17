@@ -23,10 +23,10 @@ if(isset($_POST['id'])){
 	$checkStmt->fetch();
 	$checkStmt->close();
 	if($username==""){
-		echo "failed";
+		echo json_encode(array('result'=>'Check Failed'));
 	}
 	else{
-		echo "success";
+		echo json_encode(array('result'=>'Check'));
 	}
 	//echo $username;
 }
