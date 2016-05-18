@@ -20,7 +20,7 @@ $users = "CREATE TABLE users(
 		encrypted_password VARCHAR(255) NOT NULL, 
 		email VARCHAR(255),
 		type ENUM('Tutor', 'Tutee', 'Both') NOT NULL,
-		gpa FLOAT(4,3) NOT NULL,
+		gpa FLOAT(4,3),
 		first_name varchar(35) NOT NULL,
 		last_name varchar(35),
 		graduation_year int(4),
@@ -31,11 +31,11 @@ mysql_select_db('tutoru');
 $retval = mysql_query($users, $conn);
 $tutorInfo= "CREATE TABLE tutorInfo( id int(11) NOT NULL PRIMARY KEY,
 								description text,
-								rating int(1),
+								rating float(3,2),
 								price double(4,2));";
 mysql_query($tutorInfo,$conn);
 
-$classes = "CREATE TABLE classes(id int(11) NOT NULL, classes text);";
+$classes = "CREATE TABLE CLASSES(id int(11) NOT NULL, classes text)";
 mysql_query($classes,$conn);
 
 if(!$retval){
@@ -46,8 +46,9 @@ $review = "CREATE TABLE review(tutorID int(11) NOt NULL, reviewerID int(11) NOT 
 								title varchar(100), review varchar(500), rating float(2,1));";
 mysql_query($review, $conn);
 
-$image = "CREATE TABLE image(id int(11), image longblob);";
-
+$image = "CREATE TABLE IMAGE(id int(11) PRIMARY KEY NOT NULL, image longblob);";
+$review = "CREATE TABLE REVIEW(tutorID int(11) NOT NULL, reviewerID int(11) NOT NULL, name varchar(70), title varchar(100), review varchar(500), rating float(3,2))";
+$temp = "CREATE TABLE TEMP(id int(11),`key` varchar(255),time time)";
 mysql_query($image, $conn);
 								
 
