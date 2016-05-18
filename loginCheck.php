@@ -12,7 +12,7 @@ if(isset($_POST['id'])){
 	require_once __DIR__ . '/database_handler.php';
 	
 	$db = new database_handler();
-	
+	$id=$_POST['id'];
 	$checkQuery = "SELECT username FROM USERS where id = $id";
 	
 	if(!$checkStmt = $db->con->prepare($checkQuery)){
