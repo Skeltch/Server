@@ -1,38 +1,43 @@
-<?php
-/*
-Script used to load other user's profile page
-Created and debugged by Samuel Cheung
-*/
-	require_once __DIR__ . '/database_handler.php';
+<?php 
+
+require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 
-	//This php script was created for security. There is no reason to send the password
-	//And other personal information
 	$id = $_POST['id'];
-	
-	//Include email?
-	//Allow otherProfile to view tutee profiles as well?
-	$infoQuery = "SELECT a.username, a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description, b.rating, b.price
-					FROM USERS a, tutorInfo b
-					WHERE a.id='$id' AND b.id='$id'";
+	$infoQuery = "SELECT * FROM USERS WHERE id = '$id'";
 	if(!$infoStmt = $db->con->prepare($infoQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
 	$infoStmt->execute();
-	$infoStmt->bind_result($username, $firstName, $lastName, $gpa,
-						$gradYear, $major, $description, $rating, $price);
+	$infoStmt->bind_result($id, $username, $password, $email, $role, $gpa,
+						$firstName, $lastName, $gradYear, $dob,
+						$major);
 	$infoStmt->fetch();
-	$outputInfo = array('username'=>$username, 'first_name'=>$firstName,
-						'last_name'=>$lastName, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-						'major'=>$major, 'description'=>$description, 'rating'=>$rating, 'price'=>$price);
 	$infoStmt->close();
-					
-	$classesQuery ="SELECT * FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
-	$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
 	$outputClasses = array();
-	while($row = mysqli_fetch_assoc($resultClasses)){
-		$outputClasses[] = $row;
+	$outputInfo = array('first_name'=>$firstName, 'last_name'=>$lastName, 'gpa'=>$gpa, 
+	'graduation_year'=>$gradYear, 'major'=>$major, 'dob'=>$dob);
+	if($role!="Tutee"){
+		$tutorQuery ="SELECT description, rating, price FROM tutorInfo WHERE id = '$id'";
+		if(!$tutorStmt = $db->con->prepare($tutorQuery)){
+			echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+		}
+		$tutorStmt->execute();
+		$tutorStmt->bind_result($description, $rating, $price);
+		$tutorStmt->fetch();
+		$tutorStmt->close();
+		//Overwrite if tutor
+		$outputInfo = array('first_name'=>$firstName, 'last_name'=>$lastName, 'role'=>$role, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
+			'major'=>$major, 'dob'=>$dob, 'description'=>$description, 'rating'=>$rating, 'price'=>$price);
+		
+		//Are prepared statements necessary here as all classes will be strings that we decide
+		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
+		$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
+		while($row = mysqli_fetch_assoc($resultClasses)){
+			$outputClasses[] = $row;
+		}
 	}
+	//Creating a table just for images so select * statements are not affected by blob types
 	$imageQuery = "SELECT image from IMAGE where id = '$id'";
 	$imageString="";
 	
@@ -44,6 +49,7 @@ Created and debugged by Samuel Cheung
 		$imageStmt->fetch();
 		$imageStmt->close();
 		$imageString = base64_encode($imageString);
-	$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
-	echo json_encode($output);
+		$output = array('info'=>$outputInfo, 'classes'=>$outputClasses, 'imageString'=>$imageString);
+		echo json_encode($output);
+
 ?>
