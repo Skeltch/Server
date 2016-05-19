@@ -6,7 +6,7 @@ Created and debugged by Samuel Cheung
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 	$id = $_POST['id'];
-	$reviewQuery = "SELECT * FROM REVIEW WHERE tutorID = $id";
+	$reviewQuery = "SELECT * FROM REVIEW WHERE tutorID = $id ORDER BY date DESC";
 	if(!$reviewStmt = $db->con->prepare($reviewQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
