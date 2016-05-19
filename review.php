@@ -9,8 +9,8 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating) 
-									VALUES (?, ?, ?, ?, ?, ?)")){
+	if(!$stmt = $db->con->prepare("INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating, date) 
+									VALUES (?, ?, ?, ?, ?, ?, CURDATE())")){
 		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 	}
 	if(!$stmt->bind_param("iisssd", $tutorID, $reviewerID, $name, $title, $review, $rating)){

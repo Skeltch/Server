@@ -11,10 +11,10 @@ Created and debugged by Samuel Cheung
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
 	$reviewStmt->execute();
-	$reviewStmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating);
+	$reviewStmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating, $date);
 	$reviews = array();
 	while($reviewStmt->fetch()){
-		$reviews[] = array('name'=>$name, 'title'=>$title, 'review'=>$review, 'rating'=>$rating);
+		$reviews[] = array('name'=>$name, 'title'=>$title, 'review'=>$review, 'rating'=>$rating, 'date'=>$date);
 	}
 	$reviewStmt->close();
 	echo json_encode($reviews);
