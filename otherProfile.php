@@ -15,8 +15,6 @@ require_once __DIR__ . '/database_handler.php';
 	$infoStmt->fetch();
 	$infoStmt->close();
 	$outputClasses = array();
-	$outputInfo = array('first_name'=>$firstName, 'last_name'=>$lastName, 'gpa'=>$gpa, 
-	'graduation_year'=>$gradYear, 'major'=>$major, 'dob'=>$dob);
 	if($role!="Tutee"){
 		$tutorQuery ="SELECT description, rating, price FROM tutorInfo WHERE id = '$id'";
 		if(!$tutorStmt = $db->con->prepare($tutorQuery)){
@@ -27,8 +25,6 @@ require_once __DIR__ . '/database_handler.php';
 		$tutorStmt->fetch();
 		$tutorStmt->close();
 		//Overwrite if tutor
-		$outputInfo = array('first_name'=>$firstName, 'last_name'=>$lastName, 'role'=>$role, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
-			'major'=>$major, 'dob'=>$dob, 'description'=>$description, 'rating'=>$rating, 'price'=>$price);
 		
 		//Are prepared statements necessary here as all classes will be strings that we decide
 		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
@@ -37,6 +33,13 @@ require_once __DIR__ . '/database_handler.php';
 			$outputClasses[] = $row;
 		}
 	}
+	else{
+		$descripton="null";
+		$rating="null";
+		$price="null";
+	}
+	$outputInfo = array('first_name'=>$firstName, 'last_name'=>$lastName, 'role'=>$role, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
+	'major'=>$major, 'dob'=>$dob, 'description'=>$description, 'rating'=>$rating, 'price'=>$price);
 	//Creating a table just for images so select * statements are not affected by blob types
 	$imageQuery = "SELECT image from IMAGE where id = '$id'";
 	$imageString="";
