@@ -14,7 +14,7 @@ Created and debugged by Samuel Cheung
 	$reviewStmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating, $date);
 	$reviews = array();
 	while($reviewStmt->fetch()){
-		$reviews[] = array('name'=>$name, 'title'=>$title, 'review'=>$review, 'rating'=>$rating, 'date'=>$date);
+		$reviews[] = array('name'=>$name, 'reviewerID'=>$reviewerID 'title'=>$title, 'review'=>$review, 'rating'=>$rating, 'date'=>$date);
 	}
 	$reviewStmt->close();
 	echo json_encode($reviews);
