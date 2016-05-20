@@ -5,12 +5,13 @@ Initially checks to see whether the user has left a review before or not and loa
 Inserts review into the review table when submitted
 Created and debugged by Samuel Cheung
 */
+require_once __DIR__ . '/database_handler.php';
+$db = new database_handler();
 if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating'])){	
-	require_once __DIR__ . '/database_handler.php';
-	$db = new database_handler();
 	
 	$tutorID = intval($_POST['tutorID']);
 	$reviewerID = intval($_POST['reviewerID']);
+	//This is because there is no unique key in REVIEW, it is easier to just change the query a little
 	if(isset($_POST['edit'])){
 			$reviewQuery="UPDATE REVIEW SET tutorID = COALESCE(?, tutorID),
 					reviewerID = COALESCE(?,reviewerID),  name = COALESCE(?, name), 
@@ -19,8 +20,8 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 					WHERE tutorID=$tutorID AND reviewerID=$reviewerID";
 	}
 	else{
-		$reviewQuery="INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating, date) 
-										VALUES (?, ?, ?, ?, ?, ?, CURDATE())";
+		$reviewQuery="INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating, date, commends, reports) 
+										VALUES (?, ?, ?, ?, ?, ?, CURDATE(), 0, 0)";
 	}		
 	if(!$stmt = $db->con->prepare($reviewQuery)){
 		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
@@ -67,18 +68,24 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	}
 }
 else if (isset($_POST['delete'])){
-	require_once __DIR__ . '/database_handler.php';
-	$db = new database_handler();
 	$tutorID = $_POST['tutorID'];
 	$reviewerID = $_POST['reviewerID'];
 	mysqli_query($db->con, "DELETE FROM REVIEW WHERE tutorID=$tutorID AND reviewerID=$reviewerID");
 	echo json_encode(array('activity'=>"review"));
 }
+else if (isset($_POST['commend'])){
+	$tutorID=$_POST['tutorID'];
+	$reviewerID=$_POST['commend'];
+	mysqli_query($db->con, "UPDATE REVIEW SET commends=commends+1 WHERE tutorID=$tutorID and reviewerID=$reviewerID");
+}
+else if (isset($_POST['report'])){
+	$tutorID=$_POST['tutorID'];
+	$reviewerID=$_POST['report'];
+	mysqli_query($db->con, "UPDATE REVIEW SET reports=reports+1 WHERE tutorID=$tutorID and reviewerID=$reviewerID");
+}
 //This is when the user first enters the activity so we need to retrieve the information, i.e. the tutor's profile picture
 //This also does a check to see if the user has left a review before, if they have it will redirect them 
 else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
-	require_once __DIR__ . '/database_handler.php';
-	$db = new database_handler();
 	$review = "SELECT * FROM REVIEW WHERE reviewerID=?";
 	if(!$stmt = $db->con->prepare($review)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
@@ -90,7 +97,7 @@ else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
 	if(!$stmt->execute()){
 		echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 	}
-	$stmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating, $date);
+	$stmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating, $date, $commends, $reports);
 	
 	$activity="";
 	if($stmt->fetch()){
@@ -112,7 +119,4 @@ else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
 	echo json_encode(array('activity'=>$activity, 'title'=>$title, 'review'=>$review, 'rating'=>$rating,
 		'imageString'=>$imageString, 'first_name'=>$firstName, 'last_name'=>$lastName));
 }
-
-
-
 ?>

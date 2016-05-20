@@ -13,6 +13,7 @@
 		}
 		$stmt->execute();
 		$stmt->bind_result($id);
+		//If the passwords don't match and if the key is correct, show the password reset page
 		if($stmt->fetch()  and (!isset($_POST['password']) || $_POST['password']!=$_POST['confirmPassword'])){
 			?>
 			<html>
