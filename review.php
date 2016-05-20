@@ -70,6 +70,7 @@ else if (isset($_POST['delete'])){
 	$tutorID = $_POST['tutorID'];
 	$reviewerID = $_POST['reviewerID'];
 	mysqli_query($db->con, "DELETE FROM REVIEW WHERE tutorID=$tutorID AND reviewerID=$reviewerID");
+	echo json_encode(array('activity'=>"review"));
 }
 //This is when the user first enters the activity so we need to retrieve the information, i.e. the tutor's profile picture
 //This also does a check to see if the user has left a review before, if they have it will redirect them 
