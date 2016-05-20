@@ -89,6 +89,7 @@ else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
 		//echo json_encode(array('activity'=>"edit", 'title'=>$title, 'review'=>$review, 'rating'=>$rating));
 		$activity="edit";
 	}
+	$stmt->close();
 	$id = $_POST['tutorID'];
 	$reviewerQuery = "SELECT IMAGE.image, USERS.first_name, USERS.last_name from IMAGE, USERS where IMAGE.id = '$id' and USERS.id='$id'";
 	$imageString="";
