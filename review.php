@@ -9,16 +9,25 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	require_once __DIR__ . '/database_handler.php';
 	$db = new database_handler();
 	
-	if(!$stmt = $db->con->prepare("INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating, date) 
-									VALUES (?, ?, ?, ?, ?, ?, CURDATE())")){
+	$tutorID = intval($_POST['tutorID']);
+	$reviewerID = intval($_POST['reviewerID']);
+	if(isset($_POST['edit'])){
+			$reviewQuery="UPDATE REVIEW SET tutorID = COALESCE(?, tutorID),
+					reviewerID = COALESCE(?,reviewerID),  name = COALESCE(?, name), 
+					title = COALESCE(?,title), review = COALESCE(?,review), 
+					rating = COALESCE(?,rating), date = CURDATE()
+					WHERE tutorID=$tutorID AND reviewerID=$reviewerID";
+	}
+	else{
+		$reviewQuery="INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating, date) 
+										VALUES (?, ?, ?, ?, ?, ?, CURDATE())";
+	}		
+	if(!$stmt = $db->con->prepare($reviewQuery)){
 		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 	}
 	if(!$stmt->bind_param("iisssd", $tutorID, $reviewerID, $name, $title, $review, $rating)){
 		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 	}
-
-	$tutorID = intval($_POST['tutorID']);
-	$reviewerID = intval($_POST['reviewerID']);
 	$name = $_POST['name'];
 	$title = $_POST['title'];
 	$review = $_POST['review'];
@@ -73,8 +82,9 @@ else if (isset($_POST['reviewerID']) and isset($_POST['tutorID'])){
 	if(!$stmt->execute()){
 		echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 	}
-	if(mysqli_stmt_get_result($stmt)->num_rows>0){
-		echo json_encode(array('activity'=>"redirect"));
+	$stmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating, $date);
+	if($stmt->fetch()){
+		echo json_encode(array('activity'=>"edit", 'title'=>$title, 'review'=>$review, 'rating'=>$rating));
 	}
 	else{
 		$id = $_POST['tutorID'];
