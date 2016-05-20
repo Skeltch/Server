@@ -67,6 +67,8 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	}
 }
 else if (isset($_POST['delete'])){
+	require_once __DIR__ . '/database_handler.php';
+	$db = new database_handler();
 	$tutorID = $_POST['tutorID'];
 	$reviewerID = $_POST['reviewerID'];
 	mysqli_query($db->con, "DELETE FROM REVIEW WHERE tutorID=$tutorID AND reviewerID=$reviewerID");
