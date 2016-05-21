@@ -38,9 +38,9 @@ Created and debugged by Samuel Cheung
 		for($i=0; $i<count($classesJSON); $i++){
 			//$classes = $classesJSON->{strval($i)};
 			$classes = $classesJSON[$i];
-			error_log($classes);
-			error_log(count($classesJSON));
-			error_log(json_encode($_POST['classes']));
+			//error_log($classes);
+			//error_log(count($classesJSON));
+			//error_log(json_encode($_POST['classes']));
 			if(!$classesStmt = $db->con->prepare("INSERT INTO CLASSES (id, classes) VALUES (?,?)")){
 				echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
 			}

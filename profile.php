@@ -35,12 +35,21 @@ Created and debugged by Samuel Cheung
 			'last_name'=>$lastName, 'email'=>$email, 'gpa'=>$gpa, 'graduation_year'=>$gradYear,
 			'major'=>$major, 'dob'=>$dob, 'description'=>$description, 'rating'=>$rating, 'price'=>$price);
 		
-		//Are prepared statements necessary here as all classes will be strings that we decide
-		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
+		$classesQuery ="SELECT classes FROM CLASSES WHERE id = ? ORDER BY CLASSES";
+		$stmt=$db->con->prepare($classesQuery);
+		$stmt->bind_param("i",$id);
+		$stmt->execute();
+		$stmt->bind_result($classes);
+		$outputClasses= array();
+		while($stmt->fetch()){
+			$outputClasses[] = $classes;
+		}
+		/*
 		$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
 		while($row = mysqli_fetch_assoc($resultClasses)){
 			$outputClasses[] = $row;
 		}
+		*/
 	}
 	//Creating a table just for images so select * statements are not affected by blob types
 	$imageQuery = "SELECT image from IMAGE where id = '$id'";

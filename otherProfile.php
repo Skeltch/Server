@@ -28,10 +28,12 @@ require_once __DIR__ . '/database_handler.php';
 		
 		//Are prepared statements necessary here as all classes will be strings that we decide
 		$classesQuery ="SELECT classes FROM CLASSES WHERE id = '$id' ORDER BY CLASSES";
+		
 		$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
 		while($row = mysqli_fetch_assoc($resultClasses)){
 			$outputClasses[] = $row;
 		}
+	
 	}
 	else{
 		$descripton="null";
