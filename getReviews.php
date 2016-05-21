@@ -10,7 +10,7 @@ Created and debugged by Samuel Cheung
 	if(!$reviewStmt = $db->con->prepare($reviewQuery)){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
-	$reviewStmt->bind_param($lower, $upper);
+	$reviewStmt->bind_param("ii",$lower, $upper);
 	$lower=0;
 	$upper=10;
 	$reviewStmt->execute();
