@@ -13,7 +13,7 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	$reviewerID = intval($_POST['reviewerID']);
 	//This is because there is no unique key in REVIEW, it is easier to just change the query a little
 	if(isset($_POST['edit'])){
-			$reviewQuery="UPDATE REVIEW SET tutorID = COALESCE(?, tutorID),
+		$reviewQuery="UPDATE REVIEW SET tutorID = COALESCE(?, tutorID),
 					reviewerID = COALESCE(?,reviewerID),  name = COALESCE(?, name), 
 					title = COALESCE(?,title), review = COALESCE(?,review), 
 					rating = COALESCE(?,rating), date = CURDATE()
@@ -22,6 +22,8 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 	else{
 		$reviewQuery="INSERT INTO REVIEW (tutorID, reviewerID, name, title, review, rating, date, commends, reports) 
 										VALUES (?, ?, ?, ?, ?, ?, CURDATE(), 0, 0)";
+		//$extraQuery="INSERT INTO reviewExtra(tutorID, reviewerID, userID) VALUES ($tutorID, $reviewerID, $userID)";
+		//mysqli_query($db->con, $extraQuery);
 	}		
 	if(!$stmt = $db->con->prepare($reviewQuery)){
 		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
@@ -70,15 +72,41 @@ if(isset($_POST['title']) and isset($_POST['review']) and isset($_POST['rating']
 else if (isset($_POST['delete'])){
 	$tutorID = $_POST['tutorID'];
 	$reviewerID = $_POST['reviewerID'];
-	mysqli_query($db->con, "DELETE FROM REVIEW WHERE tutorID=$tutorID AND reviewerID=$reviewerID");
+	//$query=DELETE REVIEW, reviewExtra FROM REVIEW, reviewExtra WHERE REVIEW.tutorID=$tutorID AND REVIEW.reviewerID=$reviewerID 
+	//AND reviewExtra.tutorID=$tutorID AND reviewExtra.reviewerID=$reviewerID;
+	$query="DELETE FROM REVIEW WHERE tutorID=$tutorID AND reviewerID=$reviewerID";
+	mysqli_query($db->con, $query);
 	echo json_encode(array('activity'=>"review"));
 }
 //Must change commend and report to update in a separate table 
 //that contains their ids to prevent multiple commends/reports from the same account
+//Currently inefficient; should be called when user exits profile, sends json format
 else if (isset($_POST['commend'])){
 	$tutorID=$_POST['tutorID'];
 	$reviewerID=$_POST['commend'];
-	mysqli_query($db->con, "UPDATE REVIEW SET commends=commends+1 WHERE tutorID=$tutorID and reviewerID=$reviewerID");
+	if(isset($_POST['add'])){
+		$query="UPDATE REVIEW SET commends=commends+1 WHERE tutorID=$tutorID and reviewerID=$reviewerID";
+	}
+	else{
+		$query="UPDATE REVIEW SET commends=commends-1 WHERE tutorID=$tutorID and reviewerID=$reviewerID";
+	}
+	mysqli_query($db->con, $query);
+	/*
+	$userID=$_POST['userID'];
+	$query="SELECT TOP 1 reviewExtra.userID FROM reviewExtra 
+			WHERE reviewExtra.tutorID=? AND reviewExtra.reviewerID=? AND reviewExtra.userID=?";
+	if(!$stmt = $db->con->prepare($query)){
+		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+	}
+	if(!$stmt->bind_param("sss", $tutorID, $reviewerID, $userID)){
+		echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+	}
+	$stmt->execute();
+	$stmt->bind_result($exists);
+	if($stmt->fetch){
+		//DELETE ROW 
+	}
+	*/
 }
 else if (isset($_POST['report'])){
 	$tutorID=$_POST['tutorID'];

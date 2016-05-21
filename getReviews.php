@@ -25,6 +25,9 @@ Created and debugged by Samuel Cheung
 	$reviewStmt->execute();
 	$reviewStmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating, $date, $commends, $reports);
 	$reviews = array();
+	//Create array of commends from the review page that correspond to the user
+	//Maybe give each review a unique key
+	//SELECT * FROM reviewExtra WHERE tutorID=$tutorID and id=$id
 	while($reviewStmt->fetch()){
 		$reviews[] = array('name'=>$name, 'reviewerID'=>$reviewerID, 'title'=>$title, 'review'=>$review, 
 			'rating'=>$rating, 'date'=>$date, 'commends'=>$commends, 'reports'=>$reports);
