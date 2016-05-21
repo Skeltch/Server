@@ -73,6 +73,8 @@ else if (isset($_POST['delete'])){
 	mysqli_query($db->con, "DELETE FROM REVIEW WHERE tutorID=$tutorID AND reviewerID=$reviewerID");
 	echo json_encode(array('activity'=>"review"));
 }
+//Must change commend and report to update in a separate table 
+//that contains their ids to prevent multiple commends/reports from the same account
 else if (isset($_POST['commend'])){
 	$tutorID=$_POST['tutorID'];
 	$reviewerID=$_POST['commend'];
