@@ -11,8 +11,17 @@ Created and debugged by Samuel Cheung
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
 	$reviewStmt->bind_param("ii",$lower, $upper);
-	$lower=0;
-	$upper=10;
+	$loadAmount=2;
+	if(isset($_POST['loadNum'])){
+		$lower=$_POST['loadNum'];
+		$lower=$lower*$loadAmount;
+		$upper=$lower+$loadAmount;
+		$load="load";
+	}
+	else{
+		$lower=0;
+		$upper=$loadAmount;
+	}
 	$reviewStmt->execute();
 	$reviewStmt->bind_result($tutorID, $reviewerID, $name, $title, $review, $rating, $date, $commends, $reports);
 	$reviews = array();
