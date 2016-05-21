@@ -24,7 +24,7 @@ Created and debugged by Samuel Cheung
 						'graduation_year'=>$gradYear, 'major'=>$major, 'description'=>$description ,'rating'=>$rating, 'price'=>$price);
 	$infoStmt->close();		
 	
-	$classesQuery ="SELECT * FROM CLASSES WHERE id = ? ORDER BY CLASSES";
+	$classesQuery ="SELECT classes FROM CLASSES WHERE id = ? ORDER BY CLASSES";
 	/*
 	$resultClasses = mysqli_query($db->con, $classesQuery) or die ("Error in selecting " . mysqli_error($db->con));
 	$outputClasses = array();
