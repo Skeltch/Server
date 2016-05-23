@@ -62,8 +62,8 @@ Created and debugged by Samuel Cheung
 	else{
 		$major=null;
 	}
-	if(!$tutorStmt->execute()){
-		echo "Execute failed: (" .$stmt1->errno . ") " . $tutorStmt->error;
+	if (!$infoStmt->execute()){
+		echo "Execute failed: (" .$infoStmt->errno . ") " . $infoStmt->error;
 	}
 	
 	//Tutor
@@ -79,8 +79,8 @@ Created and debugged by Samuel Cheung
 		echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
 	}
 	//EXECUTE
-	if (!$infoStmt->execute()){
-		echo "Execute failed: (" .$infoStmt->errno . ") " . $infoStmt->error;
+	if(!$tutorStmt->execute()){
+		echo "Execute failed: (" .$stmt1->errno . ") " . $tutorStmt->error;
 	}
 	else{
 		if($gpa=="NULL"){
