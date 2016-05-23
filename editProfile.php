@@ -90,6 +90,9 @@ Created and debugged by Samuel Cheung
 	if(isset($_POST['major'])){
 		$major=$_POST['major'];
 	}
+	if(isset($_POST['price'])){
+		$price=$_POST['price'];
+	}
 	
 	//EXECUTE
 	if(!$tutorStmt->execute()){
