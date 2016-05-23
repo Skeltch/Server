@@ -99,6 +99,9 @@ Created and debugged by Samuel Cheung
 	if(isset($_POST['major'])){
 		$major=$_POST['major'];
 	}
+	else{
+		$major=null;
+	}
 	
 	//EXECUTE
 	if(!$tutorStmt->execute()){
@@ -115,7 +118,8 @@ Created and debugged by Samuel Cheung
 			mysqli_query($db->con, "UPDATE USERS SET graduation_year=NULL WHERE id = $id");
 		}
 		if($price=="NULL"){
-			mysqli_query($db->con, "UPDATE USERS SET price=NULL WHERE id = $id");
+			echo "Update Price";
+			mysqli_query($db->con, "UPDATE tutorInfo SET price=NULL WHERE id = $id");
 		}
 		echo "success";
 		exit;
