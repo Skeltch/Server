@@ -18,50 +18,10 @@ Created and debugged by Samuel Cheung
 		echo "Prepare failed : (" .$db->con->errno . ")" . $db->con->error;
 	}
 
-	if(!$tutorStmt = $db->con->prepare("UPDATE tutorInfo
-									SET 
-									description = COALESCE(?, description),
-									price = COALESCE(?, price)
-									WHERE id = '$id'")){
-		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
-	}
-	/*
-	if(!$tutorStmt = $db->con->prepare("INSERT INTO tutorInfo (id, description) VALUES (?, ?)" )){
-		echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
-	}
-	*/
-	if(isset($_POST['classes'])){
-		$classesJSON = json_decode($_POST['classes']);
-		//One approach is to include the entire life of the prepared statements in a loop in this if statement
-		//This is costly as it is many insert statements
-		mysqli_query($db->con, "DELETE FROM CLASSES  WHERE id = '$id'") or die ("Error in selecting " . mysqli_error($db->con));
-		//Can be changed to inserting many at once ex: VALUES (?,?),(?,?) ...
-		for($i=0; $i<count($classesJSON); $i++){
-			//$classes = $classesJSON->{strval($i)};
-			$classes = $classesJSON[$i];
-			//error_log($classes);
-			//error_log(count($classesJSON));
-			//error_log(json_encode($_POST['classes']));
-			if(!$classesStmt = $db->con->prepare("INSERT INTO CLASSES (id, classes) VALUES (?,?)")){
-				echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
-			}
-			if(!$classesStmt->bind_param("is",$id,$classes)){
-				echo "Binding parameters failed: (" . $classesStmt->errno . ") " . $classesStmt->error;
-			}
-			if(!$classesStmt->execute()){
-				echo "Execute failed: (" .$stmt->errno . ") " . $classesStmt->error;
-			}
-		}
-	}
-
-	
-	//BIND_PARAM
-	if(!$tutorStmt->bind_param("ss", $description, $price)){
-		echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
-	}
 	if(!$infoStmt->bind_param("dis", $gpa, $gradYear, $major)){
 		echo "Binding parameters failed (" . $infoStmt->errno . ") " . $infoStmt->error;
 	}
+	
 	//Variable set
 	$classes='';
 	$description='';
@@ -102,12 +62,24 @@ Created and debugged by Samuel Cheung
 	else{
 		$major=null;
 	}
-	
-	//EXECUTE
 	if(!$tutorStmt->execute()){
 		echo "Execute failed: (" .$stmt1->errno . ") " . $tutorStmt->error;
 	}
-	else if (!$infoStmt->execute()){
+	
+	//Tutor
+	if(!$tutorStmt = $db->con->prepare("UPDATE tutorInfo
+									SET 
+									description = COALESCE(?, description),
+									price = COALESCE(?, price)
+									WHERE id = '$id'")){
+		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
+	}	
+	//BIND_PARAM
+	if(!$tutorStmt->bind_param("ss", $description, $price)){
+		echo "Binding parameters failed: (" . $tutorStmt->errno . ") " . $tutorStmt->error;
+	}
+	//EXECUTE
+	if (!$infoStmt->execute()){
 		echo "Execute failed: (" .$infoStmt->errno . ") " . $infoStmt->error;
 	}
 	else{
@@ -121,8 +93,31 @@ Created and debugged by Samuel Cheung
 			echo "Update Price";
 			mysqli_query($db->con, "UPDATE tutorInfo SET price=NULL WHERE id = $id");
 		}
-		echo "success";
-		exit;
 	}
+	if(isset($_POST['classes'])){
+	$classesJSON = json_decode($_POST['classes']);
+	//One approach is to include the entire life of the prepared statements in a loop in this if statement
+	//This is costly as it is many insert statements
+	mysqli_query($db->con, "DELETE FROM CLASSES  WHERE id = '$id'") or die ("Error in selecting " . mysqli_error($db->con));
+	//Can be changed to inserting many at once ex: VALUES (?,?),(?,?) ...
+	for($i=0; $i<count($classesJSON); $i++){
+		//$classes = $classesJSON->{strval($i)};
+		$classes = $classesJSON[$i];
+		//error_log($classes);
+		//error_log(count($classesJSON));
+		//error_log(json_encode($_POST['classes']));
+		if(!$classesStmt = $db->con->prepare("INSERT INTO CLASSES (id, classes) VALUES (?,?)")){
+			echo "Prepare failed: (" .$db->con->errno . ")" . $db->con->error;
+		}
+		if(!$classesStmt->bind_param("is",$id,$classes)){
+			echo "Binding parameters failed: (" . $classesStmt->errno . ") " . $classesStmt->error;
+		}
+		if(!$classesStmt->execute()){
+			echo "Execute failed: (" .$stmt->errno . ") " . $classesStmt->error;
+		}
+	}
+	echo "success";
+	exit;
+}
 	
 ?>
