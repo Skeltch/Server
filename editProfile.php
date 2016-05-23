@@ -109,7 +109,7 @@ Created and debugged by Samuel Cheung
 			mysqli_query($db->con, "UPDATE USERS SET graduation_year=NULL WHERE id = $id");
 		}
 		if($price=="NULL"){
-			mysqli_query($db->con, "UPDATE USERS SET graduation_year=NULL WHERE id = $id");
+			mysqli_query($db->con, "UPDATE USERS SET price=NULL WHERE id = $id");
 		}
 		echo "success";
 		exit;
