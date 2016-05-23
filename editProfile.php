@@ -64,12 +64,10 @@ Created and debugged by Samuel Cheung
 	}
 	//Variable set
 	$classes='';
-	$description='';
-	$password='';
-	$email='';
-	$gpa='';
+	//$description='';
+	//$gpa='';
 	$major='';
-	$price='';
+	//$price='';
 	if(isset($_POST['description'])){
 		$description = $_POST['description'];
 	}	
