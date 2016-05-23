@@ -22,7 +22,7 @@ if(isset($_POST['price'])){
 	$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? AND price<? ORDER BY id";
 }
 //Order by id since the users table is automatically ordered by id since it is auto incrementing
-if(!$stmt = mysqli_prepare($db->con, $searchQuery)){
+if(!$stmt = $db->con->prepare($searchQuery)){
 	echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 }
 if(!$stmt->bind_param("s", $class)){
