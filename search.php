@@ -8,7 +8,9 @@ require_once __DIR__ .'/database_handler.php';
 $db = new database_handler();
 
 $class = $_GET['class'];
-$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? ORDER BY id";
+//Order by rating from tutorInfo?
+//Exclude when recalled
+$searchQuery = "SELECT * FROM CLASSES WHERE classes = ? ORDER BY NEWID() LIMIT 10";
 if(isset($_POST['rating'])){
 	$rating = $_POST['rating'];
 	//Currently not completely implemented because the cards don't work
