@@ -35,6 +35,7 @@ Created and debugged by Samuel Cheung
 		//One approach is to include the entire life of the prepared statements in a loop in this if statement
 		//This is costly as it is many insert statements
 		mysqli_query($db->con, "DELETE FROM CLASSES  WHERE id = '$id'") or die ("Error in selecting " . mysqli_error($db->con));
+		//Can be changed to inserting many at once ex: VALUES (?,?),(?,?) ...
 		for($i=0; $i<count($classesJSON); $i++){
 			//$classes = $classesJSON->{strval($i)};
 			$classes = $classesJSON[$i];
@@ -83,7 +84,6 @@ Created and debugged by Samuel Cheung
 	if(isset($_POST['graduation_year'])){
 		$gradYear=$_POST['graduation_year'];
 	}
-	echo $_POST['gpa'];
 	if(isset($_POST['gpa'])){
 		$gpa=$_POST['gpa'];
 	}

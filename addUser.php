@@ -79,7 +79,7 @@ if (isset($_POST['username']) 			&& isset($_POST['password'])
 		$idStmt->close();
 		//Insert into temp and delete when user confirms email
 		mysqli_query($db->con, "INSERT INTO temp(id,`key`,time) VALUES('$id','$encrypted_password',NOW())");
-		if($type=='Tutor'){
+		if($type!='Tutee'){
 			/*
 			$idResult = mysqli_fetch_assoc(mysqli_query($db->con, "SELECT id FROM USERS WHERE username='$username'"));
 			$id = $idResult['id'];	
