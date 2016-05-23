@@ -64,32 +64,40 @@ Created and debugged by Samuel Cheung
 	}
 	//Variable set
 	$classes='';
-	$description=null;
-	$gpa=null;
-	$major=null;
-	$price=null;
+	$description='';
+	$gpa='';
+	$major='';
+	$price='';
 	if(isset($_POST['description'])){
+		echo "error";
 		$description = $_POST['description'];
 	}	
+	else{
+		$description=null;
+	}
 	if(isset($_POST['price'])){
+		echo "error";
 		$price = $_POST['price'];
 	}
-	
-	if(isset($_POST['password'])){
-		$password=$_POST['password'];
+	else{
+		$price=null;
 	}
-
 	if(isset($_POST['graduation_year'])){
+		echo "error";
 		$gradYear=$_POST['graduation_year'];
 	}
+	else{
+		$gradYear=null;
+	}
 	if(isset($_POST['gpa'])){
+		echo "error";
 		$gpa=$_POST['gpa'];
+	}
+	else{
+		$gpa=null;
 	}
 	if(isset($_POST['major'])){
 		$major=$_POST['major'];
-	}
-	if(isset($_POST['price'])){
-		$price=$_POST['price'];
 	}
 	
 	//EXECUTE
