@@ -76,21 +76,21 @@ Created and debugged by Samuel Cheung
 		$description=null;
 	}
 	if(isset($_POST['price'])){
-		echo "error";
+		echo "price";
 		$price = $_POST['price'];
 	}
 	else{
 		$price=null;
 	}
 	if(isset($_POST['graduation_year'])){
-		echo "error";
+		echo "grad";
 		$gradYear=$_POST['graduation_year'];
 	}
 	else{
 		$gradYear=null;
 	}
 	if(isset($_POST['gpa'])){
-		echo "error";
+		echo "gpa";
 		$gpa=$_POST['gpa'];
 	}
 	else{
