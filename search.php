@@ -7,7 +7,13 @@ Created and debugged by Samuel Cheung
 require_once __DIR__ .'/database_handler.php';
 $db = new database_handler();
 
-$class = $_GET['class'];
+if(isset($_GET['class'])){
+	$class = $_GET['class'];
+}
+else{
+	$class = $_POST['class'];
+}
+
 //Order by rating from tutorInfo?
 //Exclude when recalled
 $searchQuery = "SELECT * FROM CLASSES WHERE classes = ? ORDER BY RAND() LIMIT 10";
