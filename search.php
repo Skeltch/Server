@@ -48,7 +48,7 @@ if($stmt->execute()){
 	$idQuery.=")";
 	$stmt->close();
 	//This query joins the tables and selects from both tables where it matches the id in the query for both tables
-	$infoQuery = "SELECT USERS.first_name, USERS.last_name, USERS.gpa, USERS.graduation_year, USERS.major,tutorInfo.description, tutorInfo.rating 
+	$infoQuery = "SELECT USERS.id USERS.first_name, USERS.last_name, USERS.gpa, USERS.graduation_year, USERS.major,tutorInfo.description, tutorInfo.rating 
 					FROM USERS, tutorInfo WHERE USERS.id in " .$idQuery . " and USERS.id=tutorInfo.id";
 	/*
 	$infoQuery = "SELECT a.first_name, a.last_name, a.gpa, a.graduation_year, a.major, b.description, b.rating
@@ -59,11 +59,11 @@ if($stmt->execute()){
 		echo "Prepare failed: (" . $db->con->errno . ")" . $db->con->error;
 	}
 	$infoStmt->execute();
-	$infoStmt->bind_result($firstName, $lastName, $gpa,
+	$infoStmt->bind_result($id, $firstName, $lastName, $gpa,
 						$gradYear, $major, $description, $rating);
 	$i=0;
 	while($infoStmt->fetch()){
-		$outputInfo[] = array('id'=>$idArray[$i], 'first_name'=>$firstName, 'last_name'=>$lastName, 'gpa'=>$gpa, 
+		$outputInfo[] = array('id'=>$id/*$idArray[$i]*/, 'first_name'=>$firstName, 'last_name'=>$lastName, 'gpa'=>$gpa, 
 							'graduation_year'=>$gradYear, 'major'=>$major, 'description'=>$description ,'rating'=>$rating);
 		$i++;
 	}
